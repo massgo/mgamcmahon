@@ -1,0 +1,7 @@
+players:
+    - name   : Andrew Hall
+      rank   : 2 
+      aga_id : 1234
+    - name   : Walther Chen
+      rank   : 5
+      aga_id : 13145
