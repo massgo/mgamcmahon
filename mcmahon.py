@@ -11,6 +11,7 @@ class Player(object):
         player.name = player_dict['name'] 
         player.rank = player_dict['rank']
         player.aga_id = player_dict['aga_id']
+        player.mm_score = player_dict['mm_score']
         return player
 
     def __repr__(self):
@@ -21,12 +22,19 @@ class Tournament(object):
     def from_yaml (yaml_file):
         tournament = Tournament()
         tourn_dict = yaml.load(yaml_file) 
-        tournament.players = set()
-        for player_dict in tourn_dict['players']:
-            tournament.players |= {Player.from_dict(player_dict)}
+        tournament.id_ctr = tourn_dict['id_ctr']
+
+        tournament.players = {} 
+        for key, value in tourn_dict['players'].items():
+            tournament.players[key] = Player.from_dict(value)
         return tournament
+
+    def standings(self):
+        return sorted(list(self.players.keys()), key = lambda k: self.players[k].mm_score)
+
 
 if __name__ == '__main__':
     test = Tournament.from_yaml(open("tournament.yaml", 'r+'))
     print(test.players)
+    print(test.standings())
 

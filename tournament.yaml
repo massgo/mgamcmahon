@@ -1,7 +1,13 @@
 players:
-    - name   : Andrew Hall
-      rank   : 2 
-      aga_id : 1234
-    - name   : Walther Chen
-      rank   : 5
-      aga_id : 13145
+    0:
+        name      : Andrew Hall
+        rank      : 2 
+        aga_id    : 1234
+        mm_score  : 20
+    1: 
+        name      : Walther Chen
+        rank      : 5
+        aga_id    : 13145
+        mm_score  : 10
+
+id_ctr: 2
