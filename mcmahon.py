@@ -42,12 +42,31 @@ def player_constructor(loader, node):
 yaml.add_constructor('!player', player_constructor)
 
 
-class Pairing(object):
+class Match(object):
 
-    def __init__(self, white, black, result=None):
+    def __init__(self, white, black, winner=None):
         self.white = white
         self.black = black
-        self.result = result
+        self.winner = winner
+
+    def get_winner(self):
+        return self._winner
+
+    def set_winner(self, value):
+        if value not in [self.white, self.black, None]:
+            raise ValueError("'winner' must be equal to either 'white' or 'black' (or 'None')")
+        self._winner = value
+
+    winner = property(get_winner, set_winner)
+
+    def __repr__(self):
+        safe_winner = self.winner
+        if safe_winner is None:
+            safe_winner = "None"
+        else:
+            safe_winner = str(safe_winner)
+        return ('<{:s}(white={:d}, black={:d}, winner={:s}>'
+                .format(self.__class__.__name__, self.white, self.black, safe_winner))
 
 
 class Tournament(object):
@@ -80,19 +99,19 @@ class Tournament(object):
         self.players[self.id_ctr] = player
         self.id_ctr += 1
 
-    def _round_is_valid(self, player_list):
+    def _pairing_is_valid(self, player_list):
         valid = True
         pairs = []
         temp_list = list(player_list)
-        while player_list:
+        while temp_list:
             pairs.append(frozenset([temp_list.pop(), temp_list.pop()]))
         for pair in pairs:
             if pair in self.old_pairs:
                 valid = False
                 break
         return valid
-    
-    def round_score(self, player_list):
+
+    def pairing_score(self, player_list):
         # measures sum of difference of mm_score per pairing
         # assumes even number of people?
         score = 0
@@ -102,12 +121,12 @@ class Tournament(object):
                          self.players[temp_list.pop()].mm_score)
         return score
 
-    def _generate_ideal_candidate_rounds(self, sample_size):
+    def _generate_ideal_candidate_pairings(self, sample_size):
         mm_scores = set()
         for player in self.players:
             mm_scores.add(player.mm_score)
 
-        while i < sample_size: 
+        while i < sample_size:
             player_list = []
             for mm_score in mm_scores:
                 player_sublist = [player_id for player_id, player in self.players.items()
@@ -116,32 +135,70 @@ class Tournament(object):
                 player_list.extend(player_sublist)
             yield player_list
 
-    def _generate_candidate_rounds(self, sample_size):
-        rounds = []
+    def _generate_candidate_pairings(self, sample_size):
+        pairing = []
         for i in range(sample_size):
             player_list = []
             player_list.extend(self.players.keys())
             random.shuffle(player_list)
-            rounds.append(player_list)
-        return rounds
+            pairing.append(player_list)
+        return pairing
 
-    def generate_round(self, sample_size): 
+    def generate_pairing(self, sample_size):
         # populate old pairs set, skip if first round
         if self.rounds:
-            for pair in self.rounds[-1].values():
-                self.old_pairs.add(frozenset([pair.black, pair.white]))
-        #valid_rounds = [round_ for round_ in self._generate_candidate_rounds(sample_size)
-        #                if self._round_is_valid(round_)]
-        valid_rounds = self._generate_candidate_rounds(sample_size)
+            for match in self.rounds[-1].values():
+                self.old_pairs.add(frozenset([match.black, match.white]))
+        valid_pairings = [pairing for pairing in self._generate_candidate_pairings(sample_size)
+                          if self._pairing_is_valid(pairing)]
+        # valid_pairings = self._generate_candidate_pairings(sample_size)
         best_score = 900000
-        best_round = None
-        for round_ in valid_rounds:
-            round_score = self.round_score(round_)
-            if round_score < best_score:
-                best_score = round_score
-                best_round = round_
-        return best_round
-        
+        best_pairing = None
+        for pairing in valid_pairings:
+            pairing_score = self.pairing_score(pairing)
+            if pairing_score < best_score:
+                best_score = pairing_score
+                best_pairing = pairing
+        return best_pairing
+
+    def add_result(self, round_, board, winner):
+        match = self.rounds[round_][board]
+        match.winner = winner
+
+    def round_is_finished(self, round_):
+        finished = True
+        for match in self.rounds[round_].values():
+            if match.winner is None:
+                finished = False
+                break
+        return finished
+
+    def start_new_round(self, pairing):
+        # check that last rounds is finished
+        if len(self.rounds) > 0 and not self.round_is_finished(len(self.rounds) - 1):
+            raise RuntimeError('Last round is not yet finished')
+
+        # break pairing list into tuples
+        pair_tuples = []
+        while pairing:
+            player_one = pairing.pop()
+            player_two = pairing.pop()
+            if (self.players[player_two].mm_score > self.players[player_one].mm_score):
+                white = player_two
+                black = player_one
+            else:
+                white = player_one
+                black = player_two
+            pair_tuples.append((white, black))
+
+        # sort pairing and assign corresponding new Matches to boards
+        sorted_pairing = sorted(pair_tuples, key=lambda p: self.players[p[0]].mm_score)
+        round_ = dict()
+        for board in range(1, len(sorted_pairing) + 1):
+            pair = sorted_pairing[board - 1]
+            round_[board] = Match(pair[0], pair[1])
+        self.rounds.append(round_)
+
 
 def tournament_representer(dumper, data):
     return dumper.represent_mapping('!tournament', data.__dict__)
@@ -170,6 +227,21 @@ class PlayerTestCase(unittest.TestCase):
         self.assertEqual(self.player_one, yaml.load(yaml.dump(self.player_one)))
 
 
+class MatchTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.match = Match(1, 3)
+
+    def test_repr(self):
+        self.assertEqual(repr(self.match), '<Match(white=1, black=3, winner=None>')
+
+    def test_winner(self):
+        with self.assertRaises(ValueError):
+            self.match.winner = 4
+        self.match.winner = 3
+        self.assertEqual(repr(self.match), '<Match(white=1, black=3, winner=3>')
+
+
 class TournamentTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -195,13 +267,29 @@ class TournamentTestCase(unittest.TestCase):
                    Player('Howie', -4, 5723, 1),
                    ]
         self.tournament = Tournament.new_tournament(players)
+        self.pairing = self.tournament.generate_pairing(10000)
 
     def test_yaml(self):
         self.assertEqual(self.tournament, yaml.load(yaml.dump(self.tournament)))
 
-    def test_generate_round(self):
-        round_ = self.tournament.generate_round(10000)
-        self.assertEqual(self.tournament.round_score(round_), 5)
+    def test_generate_pairing(self):
+        self.assertEqual(self.tournament.pairing_score(self.pairing), 5)
+
+    def test_new_round(self):
+        self.tournament.start_new_round(self.pairing)
+        # check that a round was generated and added to the list
+        self.assertEqual(len(self.tournament.rounds), 1)
+        # check that the round isn't finished
+        self.assertFalse(self.tournament.round_is_finished(0))
+        with self.assertRaises(RuntimeError):
+            self.tournament.start_new_round(self.pairing)
+
+    def test_results(self):
+        self.tournament.start_new_round(self.pairing)
+        for match in self.tournament.rounds[0].values():
+            # choose a random winner
+            match.winner = match.white if random.randint(0, 1) else match.black
+        self.assertTrue(self.tournament.round_is_finished(0))
 
 
 if __name__ == '__main__':
