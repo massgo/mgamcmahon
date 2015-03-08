@@ -87,7 +87,8 @@ class Tournament(object):
         return tournament
 
     def standings(self):
-        return sorted(list(self.players.keys()), key=lambda k: self.players[k].mm_score)
+        return sorted(list(self.players.keys()), key=lambda k: self.players[k].mm_score, 
+                           reverse=True)
 
     def __eq__(self, other):
         return type(other) is type(self) and self.__dict__ == other.__dict__
@@ -164,6 +165,7 @@ class Tournament(object):
     def add_result(self, round_, board, winner):
         match = self.rounds[round_][board]
         match.winner = winner
+        self.players[winner].mm_score += 1
 
     def round_is_finished(self, round_):
         finished = True
@@ -198,6 +200,42 @@ class Tournament(object):
             pair = sorted_pairing[board - 1]
             round_[board] = Match(pair[0], pair[1])
         self.rounds.append(round_)
+
+    def wall_list(self):
+        # results board sorts players by mmscore, and then shows each round's win
+        # or loss per player
+        # player, rank, round1, round2, .. roundn, mmscore.
+
+        # build id_to_wall dict to hold conversion between tournament id and 
+        # wall list id (0 indexed, for now, convert to 1 index at end)
+        current_standings = self.standings()
+        id_to_wall = {player_id: current_standings.index(player_id) 
+                      for player_id in current_standings}
+
+        # dictionary representation of the wall standings
+        # key is tournament id, value is list of str representaiton (
+        # opponent tournament id, win/loss)
+        # no mm_score (will be pulled in at the end, along with player name)
+        wall_dict = {player_id: list() for player_id in current_standings}
+
+        # for each round, create record of each player's opponents and win/loss 
+        for round_ in self.rounds:
+            for match in round_.values():
+                winner_str = '+' 
+                loser_str = '-'
+                if match.winner == match.black:
+                    winner_str += str(id_to_wall[match.white])
+                    loser_str += str(id_to_wall[match.black])
+                    wall_dict[match.white].append(loser_str)
+                else:
+                    winner_str += str(id_to_wall[match.black])
+                    loser_str += str(id_to_wall[match.white])
+                    wall_dict[match.black].append(loser_str)
+                wall_dict[match.winner].append(winner_str)
+        for player in current_standings:
+            player_obj = self.players[player]
+            print('{}: {} {}'.format(player_obj.name, player_obj.mm_score, 
+                                     str(wall_dict[player])))
 
 
 def tournament_representer(dumper, data):
@@ -286,9 +324,12 @@ class TournamentTestCase(unittest.TestCase):
 
     def test_results(self):
         self.tournament.start_new_round(self.pairing)
-        for match in self.tournament.rounds[0].values():
+        round_ = self.tournament.rounds[0]
+        for board in round_.keys():
             # choose a random winner
-            match.winner = match.white if random.randint(0, 1) else match.black
+            match = round_[board]
+            self.tournament.add_result(0, board, (match.white if random.randint(0, 1) 
+                                                  else match.black))
         self.assertTrue(self.tournament.round_is_finished(0))
 
 
