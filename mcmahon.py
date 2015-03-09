@@ -244,11 +244,12 @@ class Tournament(object):
                         loser_str += str(id_to_wall[match.white])
                         wall_dict[match.black].append(loser_str)
                     wall_dict[match.winner].append(winner_str)
+        res = []
         for player_id in current_standings:
             player_obj = self.players[player_id]
-            print('{} {}: {} {}'.format(player_id, player_obj.name, player_obj.mm_score, 
+            res.append('{} {}: {} {}'.format(player_id, player_obj.name, player_obj.mm_score, 
                                      str(wall_dict[player_id])))
-
+        return '\n'.join(res)
 
 def tournament_representer(dumper, data):
     return dumper.represent_mapping('!tournament', data.__dict__)
