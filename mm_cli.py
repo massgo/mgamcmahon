@@ -49,7 +49,7 @@ class MMCli(object):
 
         tournament.calculate_mm_score()
         tournament.start_new_round(tournament.generate_pairing(10000))
-        print(tournament.rounds[-1])  # update with method for pairings
+        #print(tournament.rounds[-1])  # update with method for pairings
         print(yaml.dump(tournament))
         h = open(args.filename, 'w')
         h.write(yaml.dump(tournament))
@@ -72,9 +72,9 @@ class MMCli(object):
         tournament.calculate_mm_score()
 
         if args.output == 'pairings':
-            for round_ in tournament.rounds:
-                print(round_)
-            # update with method for pairings
+#            for round_ in tournament.rounds:
+#                print(round_)
+            print(tournament.pairings_list())
         else:
             print(tournament.wall_list())
 
