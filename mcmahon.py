@@ -10,16 +10,18 @@ import yaml
 
 class Player(object):
 
-    def __init__(self, name, rank, aga_id, mm_score):
+    def __init__(self, name, rank, aga_id, mm_score, mm_init, division):
         self.name = name
         self.rank = rank
         self.aga_id = aga_id
         self.mm_score = mm_score
+        self.mm_init = mm_init
+        self.division = division
 
     def __repr__(self):
-        return ('<{:s}(name={:s}, rank={:d}, aga_id={:d}, mm_score={:d})>'
+        return ('<{:s}(name={:s}, rank={:d}, aga_id={:d}, mm_score={:d}, mm_init={:d}, division={:d})>'
                 .format(self.__class__.__name__, self.name, self.rank, self.aga_id,
-                        self.mm_score))
+                        self.mm_score, self.mm_init, self.division))
 
     def __eq__(self, other):
         return type(other) is type(self) and self.__dict__ == other.__dict__
@@ -37,7 +39,7 @@ yaml.add_representer(Player, player_representer)
 def player_constructor(loader, node):
     player_dict = loader.construct_mapping(node)
     return Player(player_dict['name'], player_dict['rank'], player_dict['aga_id'],
-                  player_dict['mm_score'])
+                  player_dict['mm_score'], player_dict['mm_init'], player_dict['division'])
 
 yaml.add_constructor('!player', player_constructor)
 
@@ -87,9 +89,9 @@ class Tournament(object):
         return tournament
 
     def calculate_mm_score(self):
-        # set all mm_scores to 0
+        # set all mm_scores to original mm_score 
         for player in self.players.values():
-            player.mm_score = 0
+            player.mm_score = player.mm_init 
 
         # iterate through each board in each round, add to mm_score when winner
         for idx, round_ in enumerate(self.rounds):
@@ -147,31 +149,68 @@ class Tournament(object):
                 player_list.extend(player_sublist)
             yield player_list
 
-    def _generate_candidate_pairings(self, sample_size):
-        pairing = []
-        for i in range(sample_size):
-            player_list = []
-            player_list.extend(self.players.keys())
-            random.shuffle(player_list)
-            pairing.append(player_list)
-        return pairing
+#    def _generate_candidate_pairings(self, sample_size):
+#        pairing = []
+#        for i in range(sample_size):
+#            player_list = []
+#            temp_dict = {}
+#            for player_key, player in self.players.items():
+#                if player.division in temp_dict.keys():
+#                    temp_dict[player.division].append(player_key)
+#                else:
+#                    temp_dict[player.division] = [player_key] 
+#
+#            for div in temp_dict.values():
+#                random.shuffle(div)
+#            
+#            for div in temp_dict.values():
+#                player_list.extend(div)
+#
+#            pairing.append(player_list)
+#        return pairing
 
     def generate_pairing(self, sample_size):
         # populate old pairs set, skip if first round
         if self.rounds:
             for match in self.rounds[-1].values():
                 self.old_pairs.add(frozenset([match.black, match.white]))
-        valid_pairings = [pairing for pairing in self._generate_candidate_pairings(sample_size)
-                          if self._pairing_is_valid(pairing)]
-        # valid_pairings = self._generate_candidate_pairings(sample_size)
-        best_score = 900000
-        best_pairing = None
-        for pairing in valid_pairings:
-            pairing_score = self.pairing_score(pairing)
-            if pairing_score < best_score:
-                best_score = pairing_score
-                best_pairing = pairing
-        return best_pairing
+        
+        # Generate candidate pairings for one division
+        pairings = []  # list initialized for all pairings in a round
+        div_dict = {}  # dict for paritioning player_keys into divisions
+        # Create a dict of lists of divisions (list values are player_key)
+        for player_key, player in self.players.items():
+            if player.division in div_dict.keys():
+                div_dict[player.division].append(player_key)
+            else:
+                div_dict[player.division] = [player_key] 
+
+        # for each division, generate pairings and optimize.
+        for div in div_dict.values():
+            # generating possible pairings
+            div_pairings = []  # list of lists of possible pairings
+            for i in range(sample_size):
+                random.shuffle(div)
+                div_pairings.append(list(div))
+            valid_pairings = [pairing for pairing in div_pairings
+                              if self._pairing_is_valid(pairing)]
+            # look for most optimized pairings
+            best_score = 900000
+            best_pairing = None
+            for pairing in valid_pairings:
+                pairing_score = self.pairing_score(pairing)
+                if pairing_score < best_score:
+                    best_score = pairing_score
+                    best_pairing = pairing
+            # append best pairing to pairings list
+            pairings.append(best_pairing)
+            print(best_score)
+        return [player for division in pairings for player in division]
+            
+        #for div in div_dict.values():
+        #    player_list.extend(div)
+        #pairings.append(player_list)
+        #print(best_score)
 
     def add_result(self, round_, board, winner):
         match = self.rounds[round_][board]
@@ -187,7 +226,7 @@ class Tournament(object):
         return finished
 
     def start_new_round(self, pairing):
-        # check that last rounds is finished
+        # check that last round is finished
         if len(self.rounds) > 0 and not self.round_is_finished(len(self.rounds) - 1):
             raise RuntimeError('Last round is not yet finished')
 
@@ -205,7 +244,8 @@ class Tournament(object):
             pair_tuples.append((white, black))
 
         # sort pairing and assign corresponding new Matches to boards
-        sorted_pairing = sorted(pair_tuples, key=lambda p: self.players[p[0]].mm_score)
+        sorted_pairing = sorted(pair_tuples, key=lambda p: self.players[p[0]].mm_score,
+                                reverse=True)
         round_ = dict()
         for board in range(1, len(sorted_pairing) + 1):
             pair = sorted_pairing[board - 1]
@@ -220,7 +260,7 @@ class Tournament(object):
         # build id_to_wall dict to hold conversion between tournament id and
         # wall list id (0 indexed, for now, convert to 1 index at end)
         current_standings = self.standings()
-        id_to_wall = {player_id: current_standings.index(player_id)
+        id_to_wall = {player_id : current_standings.index(player_id)
                       for player_id in current_standings}
 
         # dictionary representation of the wall standings
@@ -236,19 +276,30 @@ class Tournament(object):
                     winner_str = '+'
                     loser_str = '-'
                     if match.winner == match.black:
-                        winner_str += str(id_to_wall[match.white])
-                        loser_str += str(id_to_wall[match.black])
+                        winner_str += str(id_to_wall[match.white] + 1)
+                        loser_str += str(id_to_wall[match.black] + 1)
                         wall_dict[match.white].append(loser_str)
                     else:
-                        winner_str += str(id_to_wall[match.black])
-                        loser_str += str(id_to_wall[match.white])
+                        winner_str += str(id_to_wall[match.black] + 1)
+                        loser_str += str(id_to_wall[match.white] + 1)
                         wall_dict[match.black].append(loser_str)
                     wall_dict[match.winner].append(winner_str)
         res = []
-        for player_id in current_standings:
+        for standing, player_id in enumerate(current_standings):
             player_obj = self.players[player_id]
-            res.append('{} {}: {} {}'.format(player_id, player_obj.name, player_obj.mm_score,
-                                     str(wall_dict[player_id])))
+            # format opponents string
+            opponents = ', '.join(wall_dict[player_id])
+            res.append('{}. {} ({}) : {}'.format((standing +1), player_obj.name, player_obj.mm_score,
+                                     opponents))
+        return '\n'.join(res)
+
+    def pairings_list(self):
+        # pretty printing pairings list with board#, names.
+        res = []
+        current_round = self.rounds[-1]
+        for board_key, board in current_round.items():
+            res.append('{}: {} (W) v. {} (B)'.format(board_key, self.players[board.white].name,
+                                                            self.players[board.black].name))
         return '\n'.join(res)
 
 def tournament_representer(dumper, data):
@@ -268,11 +319,11 @@ yaml.add_constructor('!tournament', tournament_constructor)
 class PlayerTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.player_one = Player('Andrew', 10, 12345, 5000000)
+        self.player_one = Player('Andrew', 10, 12345, 5, 5, 1)
 
     def test_repr(self):
         self.assertEqual(repr(self.player_one), '<Player(name=Andrew, rank=10,'
-                                                ' aga_id=12345, mm_score=5000000)>')
+                                                ' aga_id=12345, mm_score=5, mm_init=5, division=1)>')
 
     def test_yaml(self):
         self.assertEqual(self.player_one, yaml.load(yaml.dump(self.player_one)))
@@ -296,26 +347,26 @@ class MatchTestCase(unittest.TestCase):
 class TournamentTestCase(unittest.TestCase):
 
     def setUp(self):
-        players = [Player('Ma Wang', 7, 12345, 6),
-                   Player('Will', 4, 1235, 6),
-                   Player('Steve', 4, 234, 6),
-                   Player('Mr. Cho', 3, 54, 6),
-                   Player('XiaoCheng', 3, 5723, 6),
-                   Player('Alex', 1, 632, 6),
-                   Player('Matt', 4, 5723, 6),
-                   Player('Ed', 2, 5723, 6),
-                   Player('Josh', 1, 5723, 6),
-                   Player('Kevin', 1, 5723, 6),
-                   Player('Gus', 1, 5723, 6),
-                   Player('Pete', -2, 5723, 1),
-                   Player('Dan', -1, 5723, 1),
-                   Player('David', -2, 5723, 1),
-                   Player('Alex', -3, 5723, 1),
-                   Player('Eric', -4, 5723, 1),
-                   Player('Makio', -4, 5723, 1),
-                   Player('David', -4, 5723, 1),
-                   Player('Eric', -4, 5723, 1),
-                   Player('Howie', -4, 5723, 1),
+        players = [Player('Ma Wang', 7, 12345, 6, 6, 1),
+                   Player('Will', 4, 1235, 6, 6, 1),
+                   Player('Steve', 4, 234, 6, 6, 1),
+                   Player('Mr. Cho', 3, 54, 6, 6, 1),
+                   Player('XiaoCheng', 3, 5723, 6, 6, 1),
+                   Player('Alex', 1, 632, 6, 6, 1),
+                   Player('Matt', 4, 5723, 6, 6, 1),
+                   Player('Ed', 2, 5723, 6, 6, 1),
+                   Player('Josh', 1, 5723, 6, 6, 1),
+                   Player('Kevin', 1, 5723, 6, 6, 1),
+                   Player('Gus', 1, 5723, 1, 1, 2),
+                   Player('Pete', -2, 5723, 1, 1, 2),
+                   Player('Dan', -1, 5723, 1, 1, 2),
+                   Player('David', -2, 5723, 1, 1, 2),
+                   Player('Alex', -3, 5723, 1, 1, 2),
+                   Player('Eric', -4, 5723, 1, 1, 2),
+                   Player('Makio', -4, 5723, 1, 1, 2),
+                   Player('David', -4, 5723, 1, 1, 2),
+                   Player('Eric', -4, 5723, 1, 1, 2),
+                   Player('Howie', -4, 5723, 1, 1, 2),
                    ]
         self.tournament = Tournament.new_tournament(players)
         self.pairing = self.tournament.generate_pairing(10000)
@@ -324,7 +375,7 @@ class TournamentTestCase(unittest.TestCase):
         self.assertEqual(self.tournament, yaml.load(yaml.dump(self.tournament)))
 
     def test_generate_pairing(self):
-        self.assertEqual(self.tournament.pairing_score(self.pairing), 5)
+        self.assertEqual(self.tournament.pairing_score(self.pairing), 0)
 
     def test_new_round(self):
         self.tournament.start_new_round(self.pairing)
@@ -344,7 +395,6 @@ class TournamentTestCase(unittest.TestCase):
             self.tournament.add_result(0, board, (match.white if random.randint(0, 1)
                                                   else match.black))
         self.assertTrue(self.tournament.round_is_finished(0))
-
 
 if __name__ == '__main__':
     unittest.main()

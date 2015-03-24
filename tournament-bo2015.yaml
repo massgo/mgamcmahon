@@ -1,0 +1,45 @@
+!tournament
+current_players: !!set {}
+id_ctr: 38
+old_pairs: !!set {}
+players:
+  0: !player {aga_id: 11018, mm_init: 45, mm_score: 45, name: Jie Liang, rank: 7, division: 1}
+  1: !player {aga_id: 14519, mm_init: 45, mm_score: 45, name: Chun Sun, rank: 6, division: 1}
+  2: !player {aga_id: 8323, mm_init: 45, mm_score: 45, name: Chanho Park, rank: 5, division: 1}
+  3: !player {aga_id: 21333, mm_init: 45, mm_score: 45, name: David Cho, rank: 5, division: 1}
+  4: !player {aga_id: 18900, mm_init: 45, mm_score: 45, name: Junxiang Chen, rank: 5, division: 1}
+  5: !player {aga_id: 11796, mm_init: 45, mm_score: 45, name: Walther Chen, rank: 5, division: 1}
+  6: !player {aga_id: 20320, mm_init: 45, mm_score: 45, name: Yingzhi Qian, rank: 5, division: 1}
+  7: !player {aga_id: 16983, mm_init: 45, mm_score: 45, name: William Luff, rank: 4, division: 1}
+  8: !player {aga_id: 20865, mm_init: 35, mm_score: 35, name: Xiaocheng Hu, rank: 3, division: 2}
+  9: !player {aga_id: 18255, mm_init: 35, mm_score: 35, name: Brian Lee, rank: 2, division: 2}
+  10: !player {aga_id: 573, mm_init: 35, mm_score: 35, name: Eric Osman, rank: 2, division: 2}
+  11: !player {aga_id: 20581, mm_init: 35, mm_score: 35, name: Dan Steinbrook, rank: 1, division: 2}
+  12: !player {aga_id: 12167, mm_init: 35, mm_score: 35, name: Andrew Hall, rank: 1, division: 2}
+  13: !player {aga_id: 9929, mm_init: 35, mm_score: 35, name: Gus Heck, rank: 1, division: 2}
+  14: !player {aga_id: 16984, mm_init: 35, mm_score: 35, name: Jason McGibbon, rank: -1, division: 2}
+  15: !player {aga_id: 21268, mm_init: 35, mm_score: 35, name: Nathaniel Sandalow,
+    rank: -1, division: 2}
+  16: !player {aga_id: 13755, mm_init: 25, mm_score: 25, name: Michael Sherman, rank: -4, division: 3}
+  17: !player {aga_id: 20861, mm_init: 25, mm_score: 25, name: Neil Ritter, rank: -4, division: 3}
+  18: !player {aga_id: 13754, mm_init: 25, mm_score: 25, name: Marc Salsberry, rank: -4, division: 3}
+  19: !player {aga_id: 1144, mm_init: 25, mm_score: 25, name: Eva Casey, rank: -4, division: 3}
+  20: !player {aga_id: 20742, mm_init: 25, mm_score: 25, name: Milan Mladenovic, rank: -4, division: 3}
+  21: !player {aga_id: 15814, mm_init: 25, mm_score: 25, name: Chia Chan, rank: -5, division: 3}
+  22: !player {aga_id: 4116, mm_init: 25, mm_score: 25, name: Graham Higgins, rank: -5, division: 3}
+  23: !player {aga_id: 18345, mm_init: 25, mm_score: 25, name: Titi Alailima, rank: -5, division: 3}
+  24: !player {aga_id: 21775, mm_init: 25, mm_score: 25, name: Laurent Xu, rank: -5, division: 3}
+  25: !player {aga_id: 20880, mm_init: 25, mm_score: 25, name: Shawn Ligocki, rank: -5, division: 3}
+  26: !player {aga_id: 6, mm_init: 25, mm_score: 25, name: Jason, rank: -5, division: 3}
+  27: !player {aga_id: 21648, mm_init: 25, mm_score: 25, name: David Hampton, rank: -5, division: 3}
+  28: !player {aga_id: 21655, mm_init: 9, mm_score: 9, name: Drew Teter, rank: -6, division: 4}
+  29: !player {aga_id: 20943, mm_init: 9, mm_score: 9, name: Dan Ritter, rank: -6, division: 4}
+  30: !player {aga_id: 18593, mm_init: 7, mm_score: 7, name: Joseph Chaves, rank: -8, division: 4}
+  31: !player {aga_id: 20508, mm_init: 7, mm_score: 7, name: Thomas Miller, rank: -8, division: 4}
+  32: !player {aga_id: 21693, mm_init: 6, mm_score: 6, name: Hiroyuki Kuwana, rank: -9, division: 4}
+  33: !player {aga_id: 11597, mm_init: 5, mm_score: 5, name: Steve Berthiaume, rank: -10, division: 4}
+  34: !player {aga_id: 21443, mm_init: 5, mm_score: 5, name: Yuan Yao, rank: -10, division: 4}
+  35: !player {aga_id: 21703, mm_init: 4, mm_score: 4, name: Samuel Brown, rank: -10, division: 4}
+  36: !player {aga_id: 18052, mm_init: 3, mm_score: 3, name: David Richardson, rank: -12, division: 4}
+  37: !player {aga_id: 21689, mm_init: 0, mm_score: 0, name: Andy Wei, rank: -15, division: 4}
+rounds: []
