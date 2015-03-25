@@ -3,402 +3,365 @@ current_players: !!set {}
 id_ctr: 38
 old_pairs: !!set
   ? !!python/object/apply:builtins.frozenset
-  - [13, 15]
-  : null
-  ? !!python/object/apply:builtins.frozenset
   - [5, 7]
   : null
   ? !!python/object/apply:builtins.frozenset
-  - [26, 19]
+  - [17, 27]
   : null
   ? !!python/object/apply:builtins.frozenset
-  - [10, 13]
+  - [19, 23]
   : null
   ? !!python/object/apply:builtins.frozenset
-  - [3, 6]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [25, 27]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [33, 34]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [18, 22]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [22, 23]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [24, 18]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [33, 36]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [35, 30]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [17, 21]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [4, 7]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [29, 30]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [33, 35]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [9, 10]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [28, 29]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [16, 20]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [21, 23]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [25, 19]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [30, 31]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [16, 22]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [3, 4]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [9, 11]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [17, 18]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [32, 37]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [19, 21]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [16, 19]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [12, 14]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [11, 12]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [11, 15]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [16, 26]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [24, 26]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [2, 5]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [9, 13]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [27, 20]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [8, 9]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [2, 3]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [14, 15]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [27, 23]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [1, 2]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [36, 37]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [8, 14]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [29, 31]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [25, 20]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [28, 31]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [24, 17]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [32, 34]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [0, 4]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [12, 13]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [37, 31]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [32, 29]
+  - [34, 35]
   : null
   ? !!python/object/apply:builtins.frozenset
   - [8, 10]
   : null
   ? !!python/object/apply:builtins.frozenset
-  - [8, 12]
+  - [0, 4]
   : null
   ? !!python/object/apply:builtins.frozenset
-  - [5, 6]
+  - [25, 22]
   : null
   ? !!python/object/apply:builtins.frozenset
-  - [10, 15]
+  - [18, 20]
   : null
   ? !!python/object/apply:builtins.frozenset
-  - [4, 6]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [0, 3]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [2, 6]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [27, 22]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [34, 36]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [1, 5]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [0, 7]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [11, 14]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [24, 25]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [35, 37]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [34, 28]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [18, 23]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [0, 1]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [28, 30]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [35, 36]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [17, 26]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [1, 7]
-  : null
-  ? !!python/object/apply:builtins.frozenset
-  - [20, 21]
+  - [28, 29]
   : null
   ? !!python/object/apply:builtins.frozenset
   - [32, 33]
   : null
+  ? !!python/object/apply:builtins.frozenset
+  - [2, 3]
+  : null
+  ? !!python/object/apply:builtins.frozenset
+  - [12, 14]
+  : null
+  ? !!python/object/apply:builtins.frozenset
+  - [1, 6]
+  : null
+  ? !!python/object/apply:builtins.frozenset
+  - [24, 16]
+  : null
+  ? !!python/object/apply:builtins.frozenset
+  - [9, 15]
+  : null
+  ? !!python/object/apply:builtins.frozenset
+  - [30, 31]
+  : null
+  ? !!python/object/apply:builtins.frozenset
+  - [11, 13]
+  : null
+  ? !!python/object/apply:builtins.frozenset
+  - [26, 21]
+  : null
+  ? !!python/object/apply:builtins.frozenset
+  - [36, 37]
+  : null
 players:
-  0: !player {aga_id: 11018, division: 1, mm_init: 45, mm_score: 49, name: Jie Liang,
-    rank: 7}
-  1: !player {aga_id: 14519, division: 1, mm_init: 45, mm_score: 48, name: Chun Sun,
-    rank: 6}
-  2: !player {aga_id: 8323, division: 1, mm_init: 45, mm_score: 47, name: Chanho Park,
-    rank: 5}
-  3: !player {aga_id: 21333, division: 1, mm_init: 45, mm_score: 46, name: David Cho,
-    rank: 5}
-  4: !player {aga_id: 18900, division: 1, mm_init: 45, mm_score: 47, name: Junxiang
-      Chen, rank: 5}
-  5: !player {aga_id: 11796, division: 1, mm_init: 45, mm_score: 47, name: Walther
-      Chen, rank: 5}
-  6: !player {aga_id: 20320, division: 1, mm_init: 45, mm_score: 45, name: Yingzhi
-      Qian, rank: 5}
-  7: !player {aga_id: 16983, division: 1, mm_init: 45, mm_score: 47, name: William
-      Luff, rank: 4}
-  8: !player {aga_id: 20865, division: 2, mm_init: 35, mm_score: 37, name: Xiaocheng
-      Hu, rank: 3}
-  9: !player {aga_id: 18255, division: 2, mm_init: 35, mm_score: 35, name: Brian Lee,
-    rank: 2}
-  10: !player {aga_id: 573, division: 2, mm_init: 35, mm_score: 36, name: Eric Osman,
-    rank: 2}
-  11: !player {aga_id: 20581, division: 2, mm_init: 35, mm_score: 37, name: Dan Steinbrook,
-    rank: 1}
-  12: !player {aga_id: 12167, division: 2, mm_init: 35, mm_score: 39, name: Andrew
-      Hall, rank: 1}
-  13: !player {aga_id: 9929, division: 2, mm_init: 35, mm_score: 37, name: Gus Heck,
-    rank: 1}
-  14: !player {aga_id: 16984, division: 2, mm_init: 35, mm_score: 37, name: Jason
-      McGibbon, rank: -1}
-  15: !player {aga_id: 21268, division: 2, mm_init: 35, mm_score: 38, name: Nathaniel
-      Sandalow, rank: -1}
-  16: !player {aga_id: 13755, division: 3, mm_init: 25, mm_score: 27, name: Michael
-      Sherman, rank: -4}
-  17: !player {aga_id: 20861, division: 3, mm_init: 25, mm_score: 28, name: Neil Ritter,
-    rank: -4}
-  18: !player {aga_id: 13754, division: 3, mm_init: 25, mm_score: 27, name: Marc Salsberry,
-    rank: -4}
-  19: !player {aga_id: 1144, division: 3, mm_init: 25, mm_score: 27, name: Eva Casey,
-    rank: -4}
-  20: !player {aga_id: 20742, division: 3, mm_init: 25, mm_score: 26, name: Milan
-      Mladenovic, rank: -4}
-  21: !player {aga_id: 15814, division: 3, mm_init: 25, mm_score: 25, name: Chia Chan,
-    rank: -5}
-  22: !player {aga_id: 4116, division: 3, mm_init: 25, mm_score: 26, name: Graham
-      Higgins, rank: -5}
-  23: !player {aga_id: 18345, division: 3, mm_init: 25, mm_score: 27, name: Titi Alailima,
-    rank: -5}
-  24: !player {aga_id: 21775, division: 3, mm_init: 25, mm_score: 29, name: Laurent
-      Xu, rank: -5}
-  25: !player {aga_id: 20880, division: 3, mm_init: 25, mm_score: 28, name: Shawn
-      Ligocki, rank: -5}
-  26: !player {aga_id: 6, division: 3, mm_init: 25, mm_score: 27, name: Jason, rank: -5}
-  27: !player {aga_id: 21648, division: 3, mm_init: 25, mm_score: 27, name: David
-      Hampton, rank: -5}
-  28: !player {aga_id: 21655, division: 4, mm_init: 9, mm_score: 10, name: Drew Teter,
-    rank: -6}
-  29: !player {aga_id: 20943, division: 4, mm_init: 9, mm_score: 12, name: Dan Ritter,
-    rank: -6}
-  30: !player {aga_id: 18593, division: 4, mm_init: 7, mm_score: 9, name: Joseph Chaves,
-    rank: -8}
-  31: !player {aga_id: 20508, division: 4, mm_init: 7, mm_score: 11, name: Thomas
-      Miller, rank: -8}
-  32: !player {aga_id: 21693, division: 4, mm_init: 6, mm_score: 8, name: Hiroyuki
-      Kuwana, rank: -9}
-  33: !player {aga_id: 11597, division: 4, mm_init: 5, mm_score: 8, name: Steve Berthiaume,
-    rank: -10}
-  34: !player {aga_id: 21443, division: 4, mm_init: 5, mm_score: 7, name: Yuan Yao,
-    rank: -10}
-  35: !player {aga_id: 21703, division: 4, mm_init: 4, mm_score: 4, name: Samuel Brown,
-    rank: -10}
-  36: !player {aga_id: 18052, division: 4, mm_init: 3, mm_score: 4, name: David Richardson,
-    rank: -12}
-  37: !player {aga_id: 21689, division: 4, mm_init: 0, mm_score: 2, name: Andy Wei,
-    rank: -15}
+  0: !player
+    aga_id: 11018
+    division: 1
+    mm_init: 45
+    mm_score: [46, 45, 45]
+    name: Jie Liang
+    rank: 7
+  1: !player
+    aga_id: 14519
+    division: 1
+    mm_init: 45
+    mm_score: [45, 46, 0]
+    name: Chun Sun
+    rank: 6
+  2: !player
+    aga_id: 8323
+    division: 1
+    mm_init: 45
+    mm_score: [45, 46, 0]
+    name: Chanho Park
+    rank: 5
+  3: !player
+    aga_id: 21333
+    division: 1
+    mm_init: 45
+    mm_score: [46, 45, 45]
+    name: David Cho
+    rank: 5
+  4: !player
+    aga_id: 18900
+    division: 1
+    mm_init: 45
+    mm_score: [45, 46, 0]
+    name: Junxiang Chen
+    rank: 5
+  5: !player
+    aga_id: 11796
+    division: 1
+    mm_init: 45
+    mm_score: [46, 45, 45]
+    name: Walther Chen
+    rank: 5
+  6: !player
+    aga_id: 20320
+    division: 1
+    mm_init: 45
+    mm_score: [46, 45, 45]
+    name: Yingzhi Qian
+    rank: 5
+  7: !player
+    aga_id: 16983
+    division: 1
+    mm_init: 45
+    mm_score: [45, 46, 0]
+    name: William Luff
+    rank: 4
+  8: !player
+    aga_id: 20865
+    division: 2
+    mm_init: 35
+    mm_score: [36, 35, 35]
+    name: Xiaocheng Hu
+    rank: 3
+  9: !player
+    aga_id: 18255
+    division: 2
+    mm_init: 35
+    mm_score: [36, 35, 35]
+    name: Brian Lee
+    rank: 2
+  10: !player
+    aga_id: 573
+    division: 2
+    mm_init: 35
+    mm_score: [35, 36, 0]
+    name: Eric Osman
+    rank: 2
+  11: !player
+    aga_id: 20581
+    division: 2
+    mm_init: 35
+    mm_score: [36, 35, 35]
+    name: Dan Steinbrook
+    rank: 1
+  12: !player
+    aga_id: 12167
+    division: 2
+    mm_init: 35
+    mm_score: [35, 36, 0]
+    name: Andrew Hall
+    rank: 1
+  13: !player
+    aga_id: 9929
+    division: 2
+    mm_init: 35
+    mm_score: [35, 36, 0]
+    name: Gus Heck
+    rank: 1
+  14: !player
+    aga_id: 16984
+    division: 2
+    mm_init: 35
+    mm_score: [36, 35, 35]
+    name: Jason McGibbon
+    rank: -1
+  15: !player
+    aga_id: 21268
+    division: 2
+    mm_init: 35
+    mm_score: [35, 36, 0]
+    name: Nathaniel Sandalow
+    rank: -1
+  16: !player
+    aga_id: 13755
+    division: 3
+    mm_init: 25
+    mm_score: [26, 25, 25]
+    name: Michael Sherman
+    rank: -4
+  17: !player
+    aga_id: 20861
+    division: 3
+    mm_init: 25
+    mm_score: [25, 26, 0]
+    name: Neil Ritter
+    rank: -4
+  18: !player
+    aga_id: 13754
+    division: 3
+    mm_init: 25
+    mm_score: [26, 25, 25]
+    name: Marc Salsberry
+    rank: -4
+  19: !player
+    aga_id: 1144
+    division: 3
+    mm_init: 25
+    mm_score: [25, 26, 0]
+    name: Eva Casey
+    rank: -4
+  20: !player
+    aga_id: 20742
+    division: 3
+    mm_init: 25
+    mm_score: [25, 26, 0]
+    name: Milan Mladenovic
+    rank: -4
+  21: !player
+    aga_id: 15814
+    division: 3
+    mm_init: 25
+    mm_score: [26, 25, 25]
+    name: Chia Chan
+    rank: -5
+  22: !player
+    aga_id: 4116
+    division: 3
+    mm_init: 25
+    mm_score: [26, 25, 25]
+    name: Graham Higgins
+    rank: -5
+  23: !player
+    aga_id: 18345
+    division: 3
+    mm_init: 25
+    mm_score: [26, 25, 25]
+    name: Titi Alailima
+    rank: -5
+  24: !player
+    aga_id: 21775
+    division: 3
+    mm_init: 25
+    mm_score: [25, 26, 0]
+    name: Laurent Xu
+    rank: -5
+  25: !player
+    aga_id: 20880
+    division: 3
+    mm_init: 25
+    mm_score: [25, 26, 0]
+    name: Shawn Ligocki
+    rank: -5
+  26: !player
+    aga_id: 6
+    division: 3
+    mm_init: 25
+    mm_score: [25, 26, 0]
+    name: Jason
+    rank: -5
+  27: !player
+    aga_id: 21648
+    division: 3
+    mm_init: 25
+    mm_score: [26, 25, 25]
+    name: David Hampton
+    rank: -5
+  28: !player
+    aga_id: 21655
+    division: 4
+    mm_init: 9
+    mm_score: [10, 9, 9]
+    name: Drew Teter
+    rank: -6
+  29: !player
+    aga_id: 20943
+    division: 4
+    mm_init: 9
+    mm_score: [9, 10, 0]
+    name: Dan Ritter
+    rank: -6
+  30: !player
+    aga_id: 18593
+    division: 4
+    mm_init: 7
+    mm_score: [7, 8, 0]
+    name: Joseph Chaves
+    rank: -8
+  31: !player
+    aga_id: 20508
+    division: 4
+    mm_init: 7
+    mm_score: [8, 7, 7]
+    name: Thomas Miller
+    rank: -8
+  32: !player
+    aga_id: 21693
+    division: 4
+    mm_init: 6
+    mm_score: [6, 6, 0]
+    name: Hiroyuki Kuwana
+    rank: -9
+  33: !player
+    aga_id: 11597
+    division: 4
+    mm_init: 5
+    mm_score: [6, 6, 6]
+    name: Steve Berthiaume
+    rank: -10
+  34: !player
+    aga_id: 21443
+    division: 4
+    mm_init: 5
+    mm_score: [5, 5, 0]
+    name: Yuan Yao
+    rank: -10
+  35: !player
+    aga_id: 21703
+    division: 4
+    mm_init: 4
+    mm_score: [5, 5, 5]
+    name: Samuel Brown
+    rank: -10
+  36: !player
+    aga_id: 18052
+    division: 4
+    mm_init: 3
+    mm_score: [4, 0, 0]
+    name: David Richardson
+    rank: -12
+  37: !player
+    aga_id: 21689
+    division: 4
+    mm_init: 0
+    mm_score: [0, 4, 0]
+    name: Andy Wei
+    rank: -15
 rounds:
-- 1: !!python/object:mcmahon.Match {_winner: 37, black: 37, white: 36}
-  2: !!python/object:mcmahon.Match {_winner: 33, black: 35, white: 33}
-  3: !!python/object:mcmahon.Match {_winner: 34, black: 34, white: 32}
-  4: !!python/object:mcmahon.Match {_winner: 31, black: 30, white: 31}
-  5: !!python/object:mcmahon.Match {_winner: 29, black: 28, white: 29}
-  6: !!python/object:mcmahon.Match {_winner: 22, black: 22, white: 27}
-  7: !!python/object:mcmahon.Match {_winner: 25, black: 25, white: 20}
-  8: !!python/object:mcmahon.Match {_winner: 19, black: 19, white: 21}
-  9: !!python/object:mcmahon.Match {_winner: 26, black: 26, white: 16}
-  10: !!python/object:mcmahon.Match {_winner: 24, black: 17, white: 24}
-  11: !!python/object:mcmahon.Match {_winner: 18, black: 23, white: 18}
-  12: !!python/object:mcmahon.Match {_winner: 12, black: 13, white: 12}
-  13: !!python/object:mcmahon.Match {_winner: 14, black: 15, white: 14}
-  14: !!python/object:mcmahon.Match {_winner: 11, black: 11, white: 9}
-  15: !!python/object:mcmahon.Match {_winner: 8, black: 8, white: 10}
-  16: !!python/object:mcmahon.Match {_winner: 5, black: 5, white: 2}
-  17: !!python/object:mcmahon.Match {_winner: 0, black: 0, white: 4}
-  18: !!python/object:mcmahon.Match {_winner: 1, black: 1, white: 7}
-  19: !!python/object:mcmahon.Match {_winner: 3, black: 3, white: 6}
-- 1: !!python/object:mcmahon.Match {_winner: 36, black: 36, white: 35}
-  2: !!python/object:mcmahon.Match {_winner: 33, black: 34, white: 33}
-  3: !!python/object:mcmahon.Match {_winner: 32, black: 37, white: 32}
-  4: !!python/object:mcmahon.Match {_winner: 30, black: 30, white: 28}
-  5: !!python/object:mcmahon.Match {_winner: 31, black: 31, white: 29}
-  6: !!python/object:mcmahon.Match {_winner: 16, black: 16, white: 20}
-  7: !!python/object:mcmahon.Match {_winner: 17, black: 17, white: 21}
-  8: !!python/object:mcmahon.Match {_winner: 27, black: 23, white: 27}
-  9: !!python/object:mcmahon.Match {_winner: 26, black: 26, white: 19}
-  10: !!python/object:mcmahon.Match {_winner: 24, black: 24, white: 25}
-  11: !!python/object:mcmahon.Match {_winner: 18, black: 22, white: 18}
-  12: !!python/object:mcmahon.Match {_winner: 13, black: 13, white: 9}
-  13: !!python/object:mcmahon.Match {_winner: 15, black: 10, white: 15}
-  14: !!python/object:mcmahon.Match {_winner: 12, black: 8, white: 12}
-  15: !!python/object:mcmahon.Match {_winner: 11, black: 14, white: 11}
-  16: !!python/object:mcmahon.Match {_winner: 2, black: 6, white: 2}
-  17: !!python/object:mcmahon.Match {_winner: 7, black: 7, white: 4}
-  18: !!python/object:mcmahon.Match {_winner: 0, black: 3, white: 0}
-  19: !!python/object:mcmahon.Match {_winner: 1, black: 1, white: 5}
-- 1: !!python/object:mcmahon.Match {_winner: 37, black: 37, white: 35}
-  2: !!python/object:mcmahon.Match {_winner: 34, black: 36, white: 34}
-  3: !!python/object:mcmahon.Match {_winner: 32, black: 33, white: 32}
-  4: !!python/object:mcmahon.Match {_winner: 31, black: 28, white: 31}
-  5: !!python/object:mcmahon.Match {_winner: 29, black: 30, white: 29}
-  6: !!python/object:mcmahon.Match {_winner: 20, black: 20, white: 21}
-  7: !!python/object:mcmahon.Match {_winner: 19, black: 19, white: 16}
-  8: !!python/object:mcmahon.Match {_winner: 25, black: 25, white: 27}
-  9: !!python/object:mcmahon.Match {_winner: 23, black: 23, white: 22}
-  10: !!python/object:mcmahon.Match {_winner: 17, black: 17, white: 18}
-  11: !!python/object:mcmahon.Match {_winner: 24, black: 26, white: 24}
-  12: !!python/object:mcmahon.Match {_winner: 10, black: 9, white: 10}
-  13: !!python/object:mcmahon.Match {_winner: 14, black: 8, white: 14}
-  14: !!python/object:mcmahon.Match {_winner: 15, black: 13, white: 15}
-  15: !!python/object:mcmahon.Match {_winner: 12, black: 12, white: 11}
-  16: !!python/object:mcmahon.Match {_winner: 4, black: 6, white: 4}
-  17: !!python/object:mcmahon.Match {_winner: 7, black: 5, white: 7}
-  18: !!python/object:mcmahon.Match {_winner: 2, black: 3, white: 2}
-  19: !!python/object:mcmahon.Match {_winner: 0, black: 0, white: 1}
-- 1: !!python/object:mcmahon.Match {_winner: 33, black: 36, white: 33}
-  2: !!python/object:mcmahon.Match {_winner: 30, black: 35, white: 30}
-  3: !!python/object:mcmahon.Match {_winner: 28, black: 34, white: 28}
-  4: !!python/object:mcmahon.Match {_winner: 31, black: 37, white: 31}
-  5: !!python/object:mcmahon.Match {_winner: 29, black: 32, white: 29}
-  6: !!python/object:mcmahon.Match {_winner: 27, black: 20, white: 27}
-  7: !!python/object:mcmahon.Match {_winner: 23, black: 21, white: 23}
-  8: !!python/object:mcmahon.Match {_winner: 16, black: 22, white: 16}
-  9: !!python/object:mcmahon.Match {_winner: 17, black: 26, white: 17}
-  10: !!python/object:mcmahon.Match {_winner: 25, black: 19, white: 25}
-  11: !!python/object:mcmahon.Match {_winner: 24, black: 18, white: 24}
-  12: !!python/object:mcmahon.Match {_winner: 8, black: 9, white: 8}
-  13: !!python/object:mcmahon.Match {_winner: 13, black: 10, white: 13}
-  14: !!python/object:mcmahon.Match {_winner: 15, black: 15, white: 11}
-  15: !!python/object:mcmahon.Match {_winner: 12, black: 14, white: 12}
-  16: !!python/object:mcmahon.Match {_winner: 5, black: 6, white: 5}
-  17: !!python/object:mcmahon.Match {_winner: 4, black: 3, white: 4}
-  18: !!python/object:mcmahon.Match {_winner: 1, black: 1, white: 2}
-  19: !!python/object:mcmahon.Match {_winner: 0, black: 7, white: 0}
-- 1: !!python/object:mcmahon.Match {_winner: null, black: 2, white: 0}
-  2: !!python/object:mcmahon.Match {_winner: null, black: 6, white: 1}
-  3: !!python/object:mcmahon.Match {_winner: null, black: 3, white: 7}
-  4: !!python/object:mcmahon.Match {_winner: null, black: 4, white: 5}
-  5: !!python/object:mcmahon.Match {_winner: null, black: 15, white: 12}
-  6: !!python/object:mcmahon.Match {_winner: null, black: 9, white: 14}
-  7: !!python/object:mcmahon.Match {_winner: null, black: 10, white: 11}
-  8: !!python/object:mcmahon.Match {_winner: null, black: 8, white: 13}
-  9: !!python/object:mcmahon.Match {_winner: null, black: 20, white: 24}
-  10: !!python/object:mcmahon.Match {_winner: null, black: 17, white: 25}
-  11: !!python/object:mcmahon.Match {_winner: null, black: 26, white: 27}
-  12: !!python/object:mcmahon.Match {_winner: null, black: 19, white: 18}
-  13: !!python/object:mcmahon.Match {_winner: null, black: 23, white: 16}
-  14: !!python/object:mcmahon.Match {_winner: null, black: 21, white: 22}
-  15: !!python/object:mcmahon.Match {_winner: null, black: 33, white: 29}
-  16: !!python/object:mcmahon.Match {_winner: null, black: 32, white: 31}
-  17: !!python/object:mcmahon.Match {_winner: null, black: 36, white: 28}
-  18: !!python/object:mcmahon.Match {_winner: null, black: 37, white: 30}
-  19: !!python/object:mcmahon.Match {_winner: null, black: 35, white: 34}
+- 1: !!python/object:mcmahon.Match {_winner: 0, black: 0, white: 4}
+  2: !!python/object:mcmahon.Match {_winner: 3, black: 3, white: 2}
+  3: !!python/object:mcmahon.Match {_winner: 5, black: 5, white: 7}
+  4: !!python/object:mcmahon.Match {_winner: 6, black: 6, white: 1}
+  5: !!python/object:mcmahon.Match {_winner: 11, black: 11, white: 13}
+  6: !!python/object:mcmahon.Match {_winner: 14, black: 12, white: 14}
+  7: !!python/object:mcmahon.Match {_winner: 9, black: 15, white: 9}
+  8: !!python/object:mcmahon.Match {_winner: 8, black: 10, white: 8}
+  9: !!python/object:mcmahon.Match {_winner: 22, black: 22, white: 25}
+  10: !!python/object:mcmahon.Match {_winner: 27, black: 27, white: 17}
+  11: !!python/object:mcmahon.Match {_winner: 21, black: 21, white: 26}
+  12: !!python/object:mcmahon.Match {_winner: 18, black: 20, white: 18}
+  13: !!python/object:mcmahon.Match {_winner: 23, black: 19, white: 23}
+  14: !!python/object:mcmahon.Match {_winner: 16, black: 24, white: 16}
+  15: !!python/object:mcmahon.Match {_winner: 28, black: 28, white: 29}
+  16: !!python/object:mcmahon.Match {_winner: 31, black: 30, white: 31}
+  17: !!python/object:mcmahon.Match {_winner: 33, black: 33, white: 32}
+  18: !!python/object:mcmahon.Match {_winner: 35, black: 35, white: 34}
+  19: !!python/object:mcmahon.Match {_winner: 36, black: 37, white: 36}
+- 1: !!python/object:mcmahon.Match {_winner: 0, black: 5, white: 0}
+  2: !!python/object:mcmahon.Match {_winner: 3, black: 6, white: 3}
+  3: !!python/object:mcmahon.Match {_winner: 4, black: 4, white: 2}
+  4: !!python/object:mcmahon.Match {_winner: 1, black: 1, white: 7}
+  5: !!python/object:mcmahon.Match {_winner: 14, black: 9, white: 14}
+  6: !!python/object:mcmahon.Match {_winner: 8, black: 11, white: 8}
+  7: !!python/object:mcmahon.Match {_winner: 10, black: 10, white: 13}
+  8: !!python/object:mcmahon.Match {_winner: 12, black: 15, white: 12}
+  9: !!python/object:mcmahon.Match {_winner: 21, black: 22, white: 21}
+  10: !!python/object:mcmahon.Match {_winner: 23, black: 23, white: 16}
+  11: !!python/object:mcmahon.Match {_winner: 27, black: 27, white: 18}
+  12: !!python/object:mcmahon.Match {_winner: 19, black: 19, white: 17}
+  13: !!python/object:mcmahon.Match {_winner: 20, black: 20, white: 25}
+  14: !!python/object:mcmahon.Match {_winner: 24, black: 24, white: 26}
+  15: !!python/object:mcmahon.Match {_winner: 30, black: 30, white: 28}
+  16: !!python/object:mcmahon.Match {_winner: 29, black: 31, white: 29}
+  17: !!python/object:mcmahon.Match {_winner: 34, black: 34, white: 33}
+  18: !!python/object:mcmahon.Match {_winner: 36, black: 36, white: 32}
+  19: !!python/object:mcmahon.Match {_winner: 37, black: 37, white: 35}
