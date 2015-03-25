@@ -210,7 +210,7 @@ class Tournament(object):
     def add_result(self, round_, board, winner):
         match = self.rounds[round_][board]
         match.winner = winner
-        self.players[winner].mm_score += 1
+        self.players[winner].mm_score[0] += 1
 
     def round_is_finished(self, round_):
         finished = True
@@ -315,11 +315,11 @@ yaml.add_constructor('!tournament', tournament_constructor)
 class PlayerTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.player_one = Player('Andrew', 10, 12345, 5, 5, 1)
+        self.player_one = Player('Andrew', 10, 12345, [5,0,0], 5, 1)
 
     def test_repr(self):
         self.assertEqual(repr(self.player_one), '<Player(name=Andrew, rank=10,'
-                                                ' aga_id=12345, mm_score=5, mm_init=5, division=1)>')
+                                                ' aga_id=12345, mm_score=[5, 0, 0], mm_init=5, division=1)>')
 
     def test_yaml(self):
         self.assertEqual(self.player_one, yaml.load(yaml.dump(self.player_one)))
@@ -343,28 +343,30 @@ class MatchTestCase(unittest.TestCase):
 class TournamentTestCase(unittest.TestCase):
 
     def setUp(self):
-        players = [Player('Ma Wang', 7, 12345, 6, 6, 1),
-                   Player('Will', 4, 1235, 6, 6, 1),
-                   Player('Steve', 4, 234, 6, 6, 1),
-                   Player('Mr. Cho', 3, 54, 6, 6, 1),
-                   Player('XiaoCheng', 3, 5723, 6, 6, 1),
-                   Player('Alex', 1, 632, 6, 6, 1),
-                   Player('Matt', 4, 5723, 6, 6, 1),
-                   Player('Ed', 2, 5723, 6, 6, 1),
-                   Player('Josh', 1, 5723, 6, 6, 1),
-                   Player('Kevin', 1, 5723, 6, 6, 1),
-                   Player('Gus', 1, 5723, 1, 1, 2),
-                   Player('Pete', -2, 5723, 1, 1, 2),
-                   Player('Dan', -1, 5723, 1, 1, 2),
-                   Player('David', -2, 5723, 1, 1, 2),
-                   Player('Alex', -3, 5723, 1, 1, 2),
-                   Player('Eric', -4, 5723, 1, 1, 2),
-                   Player('Makio', -4, 5723, 1, 1, 2),
-                   Player('David', -4, 5723, 1, 1, 2),
-                   Player('Eric', -4, 5723, 1, 1, 2),
-                   Player('Howie', -4, 5723, 1, 1, 2),
+        players = [Player('Ma Wang',    7, 12345, [6,0,0], 6, 1),
+                   Player('Will',       4, 1235,  [6,0,0], 6, 1),
+                   Player('Steve',      4, 234,   [6,0,0], 6, 1),
+                   Player('Mr. Cho',    3, 54,    [6,0,0], 6, 1),
+                   Player('XiaoCheng',  3, 5723,  [6,0,0], 6, 1),
+                   Player('Alex',       1, 632,   [6,0,0], 6, 1),
+                   Player('Matt',       4, 5723,  [6,0,0], 6, 1),
+                   Player('Ed',         2, 5723,  [6,0,0], 6, 1),
+                   Player('Josh',       1, 5723,  [6,0,0], 6, 1),
+                   Player('Kevin',      1, 5723,  [6,0,0], 6, 1),
+                   Player('Gus',        1, 5723,  [1,0,0], 1, 2),
+                   Player('Pete',      -2, 5723,  [1,0,0], 1, 2),
+                   Player('Dan',       -1, 5723,  [1,0,0], 1, 2),
+                   Player('David',     -2, 5723,  [1,0,0], 1, 2),
+                   Player('Alex',      -3, 5723,  [1,0,0], 1, 2),
+                   Player('Eric',      -4, 5723,  [1,0,0], 1, 2),
+                   Player('Makio',     -4, 5723,  [1,0,0], 1, 2),
+                   Player('David',     -4, 5723,  [1,0,0], 1, 2),
+                   Player('Eric',      -4, 5723,  [1,0,0], 1, 2),
+                   Player('Howie',     -4, 5723,  [1,0,0], 1, 2),
                    ]
         self.tournament = Tournament.new_tournament(players)
+        for player in self.tournament.players:
+            print(yaml.dump(self.tournament))
         self.pairing = self.tournament.generate_pairing(10000)
 
     def test_yaml(self):
