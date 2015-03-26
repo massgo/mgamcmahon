@@ -271,30 +271,40 @@ class Tournament(object):
                     winner_str = '+'
                     loser_str = '-'
                     if match.winner == match.black:
-                        winner_str += str(id_to_wall[match.white] + 1)
-                        loser_str += str(id_to_wall[match.black] + 1)
-                        wall_dict[match.white].append(loser_str)
+                        winner_str += 'B' + str(id_to_wall[match.white] + 1)
+                        loser_str += 'W' + str(id_to_wall[match.black] + 1)
+                        wall_dict[match.white].append('{:>5}'.format(loser_str))
                     else:
-                        winner_str += str(id_to_wall[match.black] + 1)
-                        loser_str += str(id_to_wall[match.white] + 1)
-                        wall_dict[match.black].append(loser_str)
-                    wall_dict[match.winner].append(winner_str)
+                        winner_str += 'W' + str(id_to_wall[match.black] + 1)
+                        loser_str += 'B' + str(id_to_wall[match.white] + 1)
+                        wall_dict[match.black].append('{:>5}'.format(loser_str))
+                    wall_dict[match.winner].append('{:>5}'.format(winner_str))
         res = []
+        res.append('{:5} {:20} |{:3} {:4} | {:15}'.format(' ', 'Player', ' S', ' SOS', 'Opponents'))
+        res.append('-' * 78)
         for standing, player_id in enumerate(current_standings):
             player_obj = self.players[player_id]
             # format opponents string
-            opponents = ', '.join(wall_dict[player_id])
-            res.append('{}. {} ({}) : {}'.format((standing + 1), player_obj.name, player_obj.mm_score,
-                                     opponents))
+            opponents = ' '.join(wall_dict[player_id])
+            # full string for each player
+            res.append('{:4}. {:20} |{:3} {:4} |{:15}'.format((standing + 1), player_obj.name, player_obj.mm_score[0], player_obj.mm_score[1], opponents))
         return '\n'.join(res)
 
     def pairings_list(self):
         # pretty printing pairings list with board#, names.
         res = []
+        res.append('')
+        res.append(' ' * 29 + '*' * 20)
+        res.append(' ' * 29 + '* Round {} Pairings *'.format(len(self.rounds)))
+        res.append(' ' * 29 + '*' * 20)
+        res.append('')
+        res.append('{:>7} | {:22} | {:22}'.format('Board', 'White', 'Black'))
+        res.append('-' * 78)
         current_round = self.rounds[-1]
         for board_key, board in current_round.items():
-            res.append('{}: {} (W) v. {} (B)'.format(board_key, self.players[board.white].name,
+            res.append('{:7} | {:22} | {:22}'.format(board_key, self.players[board.white].name,
                                                             self.players[board.black].name))
+        res.append('\n' * 50)
         return '\n'.join(res)
 
 
