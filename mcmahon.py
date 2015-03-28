@@ -14,12 +14,12 @@ class Player(object):
         self.name = name
         self.rank = rank
         self.aga_id = aga_id
-        self.mm_score = mm_score
+        self.mm_score = mm_score  # list[score, sos, sodos]
         self.mm_init = mm_init
         self.division = division
 
     def __repr__(self):
-        return ('<{:s}(name={:s}, rank={:d}, aga_id={:d}, mm_score={:d}, mm_init={:d}, division={:d})>'
+        return ('<{:s}(name={:s}, rank={:d}, aga_id={:d}, mm_score={}, mm_init={:d}, division={:d})>'
                 .format(self.__class__.__name__, self.name, self.rank, self.aga_id,
                         self.mm_score, self.mm_init, self.division))
 
@@ -89,15 +89,30 @@ class Tournament(object):
         return tournament
 
     def calculate_mm_score(self):
-        # set all mm_scores to original mm_score 
+        # set all mm_scores to original mm_score
         for player in self.players.values():
-            player.mm_score = player.mm_init 
+            player.mm_score[0] = player.mm_init  # score
+            player.mm_score[1] = 0  # sos
+            player.mm_score[2] = 0  # sodos
 
         # iterate through each board in each round, add to mm_score when winner
-        for idx, round_ in enumerate(self.rounds):
-            if self.round_is_finished(idx):
+        for i, round_ in enumerate(self.rounds):
+            if self.round_is_finished(i):
                 for board in round_.values():
-                    self.players[board.winner].mm_score += 1
+                    self.players[board.winner].mm_score[0] += 1  # score
+
+        # now that all sos scores are calculated, can do sos and sodos
+        # by iterating through all the boards
+        for i, round_ in enumerate(self.rounds):
+            if self.round_is_finished(i):
+                for board in round_.values():
+                    if board.winner == board.white:
+                        loser = board.black
+                    else:
+                        loser = board.white
+                    self.players[board.winner].mm_score[1] += self.players[loser].mm_score[0] #sos
+                    self.players[loser].mm_score[1] += self.players[board.winner].mm_score[0] #sos
+                    self.players[board.winner].mm_score[2] += self.players[loser].mm_score[0] #sodos
 
     def standings(self):
         return sorted(list(self.players.keys()), key=lambda k: self.players[k].mm_score,
@@ -131,8 +146,8 @@ class Tournament(object):
         score = 0
         temp_list = list(player_list)
         while temp_list:
-            score += abs(self.players[temp_list.pop()].mm_score -
-                         self.players[temp_list.pop()].mm_score)
+            score += abs(self.players[temp_list.pop()].mm_score[0] -
+                         self.players[temp_list.pop()].mm_score[0])
         return score
 
     def _generate_ideal_candidate_pairings(self, sample_size):
@@ -149,32 +164,12 @@ class Tournament(object):
                 player_list.extend(player_sublist)
             yield player_list
 
-#    def _generate_candidate_pairings(self, sample_size):
-#        pairing = []
-#        for i in range(sample_size):
-#            player_list = []
-#            temp_dict = {}
-#            for player_key, player in self.players.items():
-#                if player.division in temp_dict.keys():
-#                    temp_dict[player.division].append(player_key)
-#                else:
-#                    temp_dict[player.division] = [player_key] 
-#
-#            for div in temp_dict.values():
-#                random.shuffle(div)
-#            
-#            for div in temp_dict.values():
-#                player_list.extend(div)
-#
-#            pairing.append(player_list)
-#        return pairing
-
     def generate_pairing(self, sample_size):
         # populate old pairs set, skip if first round
         if self.rounds:
             for match in self.rounds[-1].values():
                 self.old_pairs.add(frozenset([match.black, match.white]))
-        
+
         # Generate candidate pairings for one division
         pairings = []  # list initialized for all pairings in a round
         div_dict = {}  # dict for paritioning player_keys into divisions
@@ -183,7 +178,7 @@ class Tournament(object):
             if player.division in div_dict.keys():
                 div_dict[player.division].append(player_key)
             else:
-                div_dict[player.division] = [player_key] 
+                div_dict[player.division] = [player_key]
 
         # for each division, generate pairings and optimize.
         for div in div_dict.values():
@@ -206,7 +201,7 @@ class Tournament(object):
             pairings.append(best_pairing)
             print(best_score)
         return [player for division in pairings for player in division]
-            
+
         #for div in div_dict.values():
         #    player_list.extend(div)
         #pairings.append(player_list)
@@ -215,7 +210,7 @@ class Tournament(object):
     def add_result(self, round_, board, winner):
         match = self.rounds[round_][board]
         match.winner = winner
-        self.players[winner].mm_score += 1
+        self.players[winner].mm_score[0] += 1
 
     def round_is_finished(self, round_):
         finished = True
@@ -260,7 +255,7 @@ class Tournament(object):
         # build id_to_wall dict to hold conversion between tournament id and
         # wall list id (0 indexed, for now, convert to 1 index at end)
         current_standings = self.standings()
-        id_to_wall = {player_id : current_standings.index(player_id)
+        id_to_wall = {player_id: current_standings.index(player_id)
                       for player_id in current_standings}
 
         # dictionary representation of the wall standings
@@ -276,31 +271,42 @@ class Tournament(object):
                     winner_str = '+'
                     loser_str = '-'
                     if match.winner == match.black:
-                        winner_str += str(id_to_wall[match.white] + 1)
-                        loser_str += str(id_to_wall[match.black] + 1)
-                        wall_dict[match.white].append(loser_str)
+                        winner_str += 'B' + str(id_to_wall[match.white] + 1)
+                        loser_str += 'W' + str(id_to_wall[match.black] + 1)
+                        wall_dict[match.white].append('{:>5}'.format(loser_str))
                     else:
-                        winner_str += str(id_to_wall[match.black] + 1)
-                        loser_str += str(id_to_wall[match.white] + 1)
-                        wall_dict[match.black].append(loser_str)
-                    wall_dict[match.winner].append(winner_str)
+                        winner_str += 'W' + str(id_to_wall[match.black] + 1)
+                        loser_str += 'B' + str(id_to_wall[match.white] + 1)
+                        wall_dict[match.black].append('{:>5}'.format(loser_str))
+                    wall_dict[match.winner].append('{:>5}'.format(winner_str))
         res = []
+        res.append('{:5} {:20} |{:3} {:4} | {:15}'.format(' ', 'Player', ' S', ' SOS', 'Opponents'))
+        res.append('-' * 78)
         for standing, player_id in enumerate(current_standings):
             player_obj = self.players[player_id]
             # format opponents string
-            opponents = ', '.join(wall_dict[player_id])
-            res.append('{}. {} ({}) : {}'.format((standing +1), player_obj.name, player_obj.mm_score,
-                                     opponents))
+            opponents = ' '.join(wall_dict[player_id])
+            # full string for each player
+            res.append('{:4}. {:20} |{:3} {:4} |{:15}'.format((standing + 1), player_obj.name, player_obj.mm_score[0], player_obj.mm_score[1], opponents))
         return '\n'.join(res)
 
     def pairings_list(self):
         # pretty printing pairings list with board#, names.
         res = []
+        res.append('')
+        res.append(' ' * 29 + '*' * 20)
+        res.append(' ' * 29 + '* Round {} Pairings *'.format(len(self.rounds)))
+        res.append(' ' * 29 + '*' * 20)
+        res.append('')
+        res.append('{:>7} | {:22} | {:22}'.format('Board', 'White', 'Black'))
+        res.append('-' * 78)
         current_round = self.rounds[-1]
         for board_key, board in current_round.items():
-            res.append('{}: {} (W) v. {} (B)'.format(board_key, self.players[board.white].name,
+            res.append('{:7} | {:22} | {:22}'.format(board_key, self.players[board.white].name,
                                                             self.players[board.black].name))
+        res.append('\n' * 50)
         return '\n'.join(res)
+
 
 def tournament_representer(dumper, data):
     return dumper.represent_mapping('!tournament', data.__dict__)
@@ -319,11 +325,11 @@ yaml.add_constructor('!tournament', tournament_constructor)
 class PlayerTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.player_one = Player('Andrew', 10, 12345, 5, 5, 1)
+        self.player_one = Player('Andrew', 10, 12345, [5,0,0], 5, 1)
 
     def test_repr(self):
         self.assertEqual(repr(self.player_one), '<Player(name=Andrew, rank=10,'
-                                                ' aga_id=12345, mm_score=5, mm_init=5, division=1)>')
+                                                ' aga_id=12345, mm_score=[5, 0, 0], mm_init=5, division=1)>')
 
     def test_yaml(self):
         self.assertEqual(self.player_one, yaml.load(yaml.dump(self.player_one)))
@@ -347,28 +353,30 @@ class MatchTestCase(unittest.TestCase):
 class TournamentTestCase(unittest.TestCase):
 
     def setUp(self):
-        players = [Player('Ma Wang', 7, 12345, 6, 6, 1),
-                   Player('Will', 4, 1235, 6, 6, 1),
-                   Player('Steve', 4, 234, 6, 6, 1),
-                   Player('Mr. Cho', 3, 54, 6, 6, 1),
-                   Player('XiaoCheng', 3, 5723, 6, 6, 1),
-                   Player('Alex', 1, 632, 6, 6, 1),
-                   Player('Matt', 4, 5723, 6, 6, 1),
-                   Player('Ed', 2, 5723, 6, 6, 1),
-                   Player('Josh', 1, 5723, 6, 6, 1),
-                   Player('Kevin', 1, 5723, 6, 6, 1),
-                   Player('Gus', 1, 5723, 1, 1, 2),
-                   Player('Pete', -2, 5723, 1, 1, 2),
-                   Player('Dan', -1, 5723, 1, 1, 2),
-                   Player('David', -2, 5723, 1, 1, 2),
-                   Player('Alex', -3, 5723, 1, 1, 2),
-                   Player('Eric', -4, 5723, 1, 1, 2),
-                   Player('Makio', -4, 5723, 1, 1, 2),
-                   Player('David', -4, 5723, 1, 1, 2),
-                   Player('Eric', -4, 5723, 1, 1, 2),
-                   Player('Howie', -4, 5723, 1, 1, 2),
+        players = [Player('Ma Wang',    7, 12345, [6,0,0], 6, 1),
+                   Player('Will',       4, 1235,  [6,0,0], 6, 1),
+                   Player('Steve',      4, 234,   [6,0,0], 6, 1),
+                   Player('Mr. Cho',    3, 54,    [6,0,0], 6, 1),
+                   Player('XiaoCheng',  3, 5723,  [6,0,0], 6, 1),
+                   Player('Alex',       1, 632,   [6,0,0], 6, 1),
+                   Player('Matt',       4, 5723,  [6,0,0], 6, 1),
+                   Player('Ed',         2, 5723,  [6,0,0], 6, 1),
+                   Player('Josh',       1, 5723,  [6,0,0], 6, 1),
+                   Player('Kevin',      1, 5723,  [6,0,0], 6, 1),
+                   Player('Gus',        1, 5723,  [1,0,0], 1, 2),
+                   Player('Pete',      -2, 5723,  [1,0,0], 1, 2),
+                   Player('Dan',       -1, 5723,  [1,0,0], 1, 2),
+                   Player('David',     -2, 5723,  [1,0,0], 1, 2),
+                   Player('Alex',      -3, 5723,  [1,0,0], 1, 2),
+                   Player('Eric',      -4, 5723,  [1,0,0], 1, 2),
+                   Player('Makio',     -4, 5723,  [1,0,0], 1, 2),
+                   Player('David',     -4, 5723,  [1,0,0], 1, 2),
+                   Player('Eric',      -4, 5723,  [1,0,0], 1, 2),
+                   Player('Howie',     -4, 5723,  [1,0,0], 1, 2),
                    ]
         self.tournament = Tournament.new_tournament(players)
+        for player in self.tournament.players:
+            print(yaml.dump(self.tournament))
         self.pairing = self.tournament.generate_pairing(10000)
 
     def test_yaml(self):
