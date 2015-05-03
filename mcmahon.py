@@ -19,7 +19,7 @@ class Player(object):
         self.division = division
 
     def __repr__(self):
-        return ('<{:s}(name={:s}, rank={:d}, aga_id={:d}, mm_score={}, mm_init={:d}, division={:d})>'
+        return ('{:s}(name={:s}, rank={:d}, aga_id={:d}, mm_score={}, mm_init={:d}, division={:d})'
                 .format(self.__class__.__name__, self.name, self.rank, self.aga_id,
                         self.mm_score, self.mm_init, self.division))
 
