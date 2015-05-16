@@ -199,8 +199,13 @@ class Tournament(object):
                     best_pairing = pairing
             # append best pairing to pairings list
             pairings.append(best_pairing)
-            print(best_score)
-        return [player for division in pairings for player in division]
+            #print(best_score)
+        res = [player for division in pairings for player in division]
+        # Here is where we sort if it's the first round
+        if len(self.rounds) == 0:
+            sorted_res = sorted(res)
+            return sorted_res
+        return res
 
         #for div in div_dict.values():
         #    player_list.extend(div)
@@ -321,6 +326,38 @@ def tournament_constructor(loader, node):
 
 yaml.add_constructor('!tournament', tournament_constructor)
 
+class HandiTournament(Tournament):
+
+    def pairing_score(self, player_list):
+        # measures sum of difference of mm_score per pairing
+        # handi adds in difference of rank as a metric
+        # assumes even number of people?
+        score_mm = 0
+        score_handi = 0
+        temp_list = list(player_list)
+        while temp_list:
+            player1 = temp_list.pop()
+            player2 = temp_list.pop()
+            score_mm += abs(self.players[player1].mm_score[0]
+                        - self.players[player2].mm_score[0])
+            score_handi += abs(self.players[player1].rank
+                        - self.players[player2].rank)
+            print (self.players[player1].rank, self.players[player2].rank, score_handi)
+        print(score_mm,  score_handi)
+        return 2 * score_mm + score_handi
+
+def handi_tournament_representer(dumper, data):
+    return dumper.represent_mapping('!handitournament', data.__dict__)
+
+yaml.add_representer(HandiTournament, handi_tournament_representer)
+
+def handi_tournament_constructor(loader, node):
+    tourn_dict = loader.construct_mapping(node)
+    return HandiTournament(tourn_dict['players'], tourn_dict['id_ctr'], tourn_dict['rounds'],
+                      tourn_dict['old_pairs'], tourn_dict['current_players'])
+
+yaml.add_constructor('!handitournament', handi_tournament_constructor)
+
 
 class PlayerTestCase(unittest.TestCase):
 
@@ -375,8 +412,8 @@ class TournamentTestCase(unittest.TestCase):
                    Player('Howie',     -4, 5723,  [1,0,0], 1, 2),
                    ]
         self.tournament = Tournament.new_tournament(players)
-        for player in self.tournament.players:
-            print(yaml.dump(self.tournament))
+        #for player in self.tournament.players:
+            #print(yaml.dump(self.tournament))
         self.pairing = self.tournament.generate_pairing(10000)
 
     def test_yaml(self):
@@ -384,6 +421,62 @@ class TournamentTestCase(unittest.TestCase):
 
     def test_generate_pairing(self):
         self.assertEqual(self.tournament.pairing_score(self.pairing), 0)
+
+    def test_new_round(self):
+        self.tournament.start_new_round(self.pairing)
+        # check that a round was generated and added to the list
+        self.assertEqual(len(self.tournament.rounds), 1)
+        # check that the round isn't finished
+        self.assertFalse(self.tournament.round_is_finished(0))
+        with self.assertRaises(RuntimeError):
+            self.tournament.start_new_round(self.pairing)
+
+    def test_results(self):
+        self.tournament.start_new_round(self.pairing)
+        round_ = self.tournament.rounds[0]
+        for board in round_.keys():
+            # choose a random winner
+            match = round_[board]
+            self.tournament.add_result(0, board, (match.white if random.randint(0, 1)
+                                                  else match.black))
+        self.assertTrue(self.tournament.round_is_finished(0))
+
+class HandiTournamentTestCase(unittest.TestCase):
+
+    def setUp(self):
+        players = [Player('Ma Wang',    -1, 12345, [1,0,0], 1, 1),
+                   Player('Will',       -2, 1235,  [1,0,0], 1, 1),
+                   Player('Steve',      -3, 234,   [1,0,0], 1, 1),
+                   Player('Mr. Cho',    -4, 54,    [1,0,0], 1, 1),
+                   Player('XiaoCheng',  -5, 5723,  [1,0,0], 1, 1),
+                   Player('Alex',       -6, 632,   [1,0,0], 1, 1),
+                   Player('Matt',       -7, 5723,  [1,0,0], 1, 1),
+                   Player('Ed',         -8, 5723,  [1,0,0], 1, 1),
+                   Player('Josh',       -9, 5723,  [1,0,0], 1, 1),
+                   Player('Kevin',     -10, 5723,  [1,0,0], 1, 1),
+                   Player('Gus',       -11, 5723,  [1,0,0], 1, 1),
+                   Player('Pete',      -12, 5723,  [1,0,0], 1, 1),
+                   Player('Dan',       -13, 5723,  [1,0,0], 1, 1),
+                   Player('David',     -14, 5723,  [1,0,0], 1, 1),
+                   Player('Alex',      -15, 5723,  [1,0,0], 1, 1),
+                   Player('Eric',      -16, 5723,  [1,0,0], 1, 1),
+                   Player('Makio',     -17, 5723,  [1,0,0], 1, 1),
+                   Player('David',     -18, 5723,  [1,0,0], 1, 1),
+                   Player('Eric',      -19, 5723,  [1,0,0], 1, 1),
+                   Player('Howie',     -20, 5723,  [1,0,0], 1, 1),
+                   ]
+        self.tournament = HandiTournament.new_tournament(players)
+        #for player in self.tournament.players:
+        #    print(yaml.dump(self.tournament))
+        # 10000 was not enough?
+        self.pairing = self.tournament.generate_pairing(1)
+
+    def test_generate_pairing(self):
+        print(self.pairing)
+        print(self.tournament.pairing_score(self.pairing))
+        # in first round, pairings are sorted and should be minimum pairing score
+        self.assertEqual(self.tournament.pairing_score(self.pairing), 10)
+
 
     def test_new_round(self):
         self.tournament.start_new_round(self.pairing)
