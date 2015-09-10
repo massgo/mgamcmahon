@@ -199,18 +199,12 @@ class Tournament(object):
                     best_pairing = pairing
             # append best pairing to pairings list
             pairings.append(best_pairing)
-            #print(best_score)
         res = [player for division in pairings for player in division]
         # Here is where we sort if it's the first round
         if len(self.rounds) == 0:
             sorted_res = sorted(res)
             return sorted_res
         return res
-
-        #for div in div_dict.values():
-        #    player_list.extend(div)
-        #pairings.append(player_list)
-        #print(best_score)
 
     def add_result(self, round_, board, winner):
         match = self.rounds[round_][board]
@@ -342,8 +336,6 @@ class HandiTournament(Tournament):
                         - self.players[player2].mm_score[0])
             score_handi += abs(self.players[player1].rank
                         - self.players[player2].rank)
-            print (self.players[player1].rank, self.players[player2].rank, score_handi)
-        print(score_mm,  score_handi)
         return 2 * score_mm + score_handi
 
 def handi_tournament_representer(dumper, data):
@@ -412,8 +404,6 @@ class TournamentTestCase(unittest.TestCase):
                    Player('Howie',     -4, 5723,  [1,0,0], 1, 2),
                    ]
         self.tournament = Tournament.new_tournament(players)
-        #for player in self.tournament.players:
-            #print(yaml.dump(self.tournament))
         self.pairing = self.tournament.generate_pairing(10000)
 
     def test_yaml(self):
@@ -466,14 +456,10 @@ class HandiTournamentTestCase(unittest.TestCase):
                    Player('Howie',     -20, 5723,  [1,0,0], 1, 1),
                    ]
         self.tournament = HandiTournament.new_tournament(players)
-        #for player in self.tournament.players:
-        #    print(yaml.dump(self.tournament))
         # 10000 was not enough?
         self.pairing = self.tournament.generate_pairing(1)
 
     def test_generate_pairing(self):
-        print(self.pairing)
-        print(self.tournament.pairing_score(self.pairing))
         # in first round, pairings are sorted and should be minimum pairing score
         self.assertEqual(self.tournament.pairing_score(self.pairing), 10)
 
