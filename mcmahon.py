@@ -110,13 +110,15 @@ class Tournament(object):
                         loser = board.black
                     else:
                         loser = board.white
-                    self.players[board.winner].mm_score[1] += self.players[loser].mm_score[0] #sos
-                    self.players[loser].mm_score[1] += self.players[board.winner].mm_score[0] #sos
-                    self.players[board.winner].mm_score[2] += self.players[loser].mm_score[0] #sodos
+                    # sos
+                    self.players[board.winner].mm_score[1] += self.players[loser].mm_score[0]
+                    self.players[loser].mm_score[1] += self.players[board.winner].mm_score[0]
+                    # sodos
+                    self.players[board.winner].mm_score[2] += self.players[loser].mm_score[0]
 
     def standings(self):
         return sorted(list(self.players.keys()), key=lambda k: self.players[k].mm_score,
-                           reverse=True)
+                      reverse=True)
 
     def __eq__(self, other):
         return type(other) is type(self) and self.__dict__ == other.__dict__
@@ -272,7 +274,8 @@ class Tournament(object):
             # format opponents string
             opponents = ' '.join(wall_dict[player_id])
             # full string for each player
-            res.append('{:4}. {:20} |{:3} {:4} |{:15}'.format((standing + 1), player_obj.name, player_obj.mm_score[0], player_obj.mm_score[1], opponents))
+            res.append('{:4}. {:20} |{:3} {:4} |{:15}'.format((standing + 1), player_obj.name,
+                       player_obj.mm_score[0], player_obj.mm_score[1], opponents))
         return '\n'.join(res)
 
     def pairings_list(self):
@@ -288,7 +291,7 @@ class Tournament(object):
         current_round = self.rounds[-1]
         for board_key, board in current_round.items():
             res.append('{:7} | {:22} | {:22}'.format(board_key, self.players[board.white].name,
-                                                            self.players[board.black].name))
+                                                     self.players[board.black].name))
         res.append('\n' * 50)
         return '\n'.join(res)
 
@@ -306,6 +309,7 @@ def tournament_constructor(loader, node):
 
 yaml.add_constructor('!tournament', tournament_constructor)
 
+
 class HandiTournament(Tournament):
 
     def pairing_score(self, player_list):
@@ -319,20 +323,22 @@ class HandiTournament(Tournament):
             player1 = temp_list.pop()
             player2 = temp_list.pop()
             score_mm += abs(self.players[player1].mm_score[0]
-                        - self.players[player2].mm_score[0])
+                            - self.players[player2].mm_score[0])
             score_handi += abs(self.players[player1].rank
-                        - self.players[player2].rank)
+                               - self.players[player2].rank)
         return 2 * score_mm + score_handi
+
 
 def handi_tournament_representer(dumper, data):
     return dumper.represent_mapping('!handitournament', data.__dict__)
 
 yaml.add_representer(HandiTournament, handi_tournament_representer)
 
+
 def handi_tournament_constructor(loader, node):
     tourn_dict = loader.construct_mapping(node)
     return HandiTournament(tourn_dict['players'], tourn_dict['id_ctr'], tourn_dict['rounds'],
-                      tourn_dict['old_pairs'], tourn_dict['current_players'])
+                           tourn_dict['old_pairs'], tourn_dict['current_players'])
 
 yaml.add_constructor('!handitournament', handi_tournament_constructor)
 
@@ -340,11 +346,12 @@ yaml.add_constructor('!handitournament', handi_tournament_constructor)
 class PlayerTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.player_one = Player('Andrew', 10, 12345, [5,0,0], 5, 1)
+        self.player_one = Player('Andrew', 10, 12345, [5, 0, 0], 5, 1)
 
     def test_repr(self):
         self.assertEqual(repr(self.player_one), 'Player(name=Andrew, rank=10,'
-                                                ' aga_id=12345, mm_score=[5, 0, 0], mm_init=5, division=1)')
+                                                ' aga_id=12345, mm_score=[5, 0, 0], mm_init=5,'
+                                                ' division=1)')
 
     def test_yaml(self):
         self.assertEqual(self.player_one, yaml.load(yaml.dump(self.player_one)))
@@ -368,26 +375,26 @@ class MatchTestCase(unittest.TestCase):
 class TournamentTestCase(unittest.TestCase):
 
     def setUp(self):
-        players = [Player('Ma Wang',    7, 12345, [6,0,0], 6, 1),
-                   Player('Will',       4, 1235,  [6,0,0], 6, 1),
-                   Player('Steve',      4, 234,   [6,0,0], 6, 1),
-                   Player('Mr. Cho',    3, 54,    [6,0,0], 6, 1),
-                   Player('XiaoCheng',  3, 5723,  [6,0,0], 6, 1),
-                   Player('Alex',       1, 632,   [6,0,0], 6, 1),
-                   Player('Matt',       4, 5723,  [6,0,0], 6, 1),
-                   Player('Ed',         2, 5723,  [6,0,0], 6, 1),
-                   Player('Josh',       1, 5723,  [6,0,0], 6, 1),
-                   Player('Kevin',      1, 5723,  [6,0,0], 6, 1),
-                   Player('Gus',        1, 5723,  [1,0,0], 1, 2),
-                   Player('Pete',      -2, 5723,  [1,0,0], 1, 2),
-                   Player('Dan',       -1, 5723,  [1,0,0], 1, 2),
-                   Player('David',     -2, 5723,  [1,0,0], 1, 2),
-                   Player('Alex',      -3, 5723,  [1,0,0], 1, 2),
-                   Player('Eric',      -4, 5723,  [1,0,0], 1, 2),
-                   Player('Makio',     -4, 5723,  [1,0,0], 1, 2),
-                   Player('David',     -4, 5723,  [1,0,0], 1, 2),
-                   Player('Eric',      -4, 5723,  [1,0,0], 1, 2),
-                   Player('Howie',     -4, 5723,  [1,0,0], 1, 2),
+        players = [Player('Ma Wang', 7, 12345, [6, 0, 0], 6, 1),
+                   Player('Will', 4, 1235, [6, 0, 0], 6, 1),
+                   Player('Steve', 4, 234, [6, 0, 0], 6, 1),
+                   Player('Mr. Cho', 3, 54, [6, 0, 0], 6, 1),
+                   Player('XiaoCheng', 3, 5723, [6, 0, 0], 6, 1),
+                   Player('Alex', 1, 632, [6, 0, 0], 6, 1),
+                   Player('Matt', 4, 5723, [6, 0, 0], 6, 1),
+                   Player('Ed', 2, 5723, [6, 0, 0], 6, 1),
+                   Player('Josh', 1, 5723, [6, 0, 0], 6, 1),
+                   Player('Kevin', 1, 5723, [6, 0, 0], 6, 1),
+                   Player('Gus', 1, 5723, [1, 0, 0], 1, 2),
+                   Player('Pete', -2, 5723, [1, 0, 0], 1, 2),
+                   Player('Dan', -1, 5723, [1, 0, 0], 1, 2),
+                   Player('David', -2, 5723, [1, 0, 0], 1, 2),
+                   Player('Alex', -3, 5723, [1, 0, 0], 1, 2),
+                   Player('Eric', -4, 5723, [1, 0, 0], 1, 2),
+                   Player('Makio', -4, 5723, [1, 0, 0], 1, 2),
+                   Player('David', -4, 5723, [1, 0, 0], 1, 2),
+                   Player('Eric', -4, 5723, [1, 0, 0], 1, 2),
+                   Player('Howie', -4, 5723, [1, 0, 0], 1, 2),
                    ]
         self.tournament = Tournament.new_tournament(players)
         self.pairing = self.tournament.generate_pairing(10000)
@@ -417,29 +424,30 @@ class TournamentTestCase(unittest.TestCase):
                                                   else match.black))
         self.assertTrue(self.tournament.round_is_finished(0))
 
+
 class HandiTournamentTestCase(unittest.TestCase):
 
     def setUp(self):
-        players = [Player('Ma Wang',    -1, 12345, [1,0,0], 1, 1),
-                   Player('Will',       -2, 1235,  [1,0,0], 1, 1),
-                   Player('Steve',      -3, 234,   [1,0,0], 1, 1),
-                   Player('Mr. Cho',    -4, 54,    [1,0,0], 1, 1),
-                   Player('XiaoCheng',  -5, 5723,  [1,0,0], 1, 1),
-                   Player('Alex',       -6, 632,   [1,0,0], 1, 1),
-                   Player('Matt',       -7, 5723,  [1,0,0], 1, 1),
-                   Player('Ed',         -8, 5723,  [1,0,0], 1, 1),
-                   Player('Josh',       -9, 5723,  [1,0,0], 1, 1),
-                   Player('Kevin',     -10, 5723,  [1,0,0], 1, 1),
-                   Player('Gus',       -11, 5723,  [1,0,0], 1, 1),
-                   Player('Pete',      -12, 5723,  [1,0,0], 1, 1),
-                   Player('Dan',       -13, 5723,  [1,0,0], 1, 1),
-                   Player('David',     -14, 5723,  [1,0,0], 1, 1),
-                   Player('Alex',      -15, 5723,  [1,0,0], 1, 1),
-                   Player('Eric',      -16, 5723,  [1,0,0], 1, 1),
-                   Player('Makio',     -17, 5723,  [1,0,0], 1, 1),
-                   Player('David',     -18, 5723,  [1,0,0], 1, 1),
-                   Player('Eric',      -19, 5723,  [1,0,0], 1, 1),
-                   Player('Howie',     -20, 5723,  [1,0,0], 1, 1),
+        players = [Player('Ma Wang', -1, 12345, [1, 0, 0], 1, 1),
+                   Player('Will', -2, 1235, [1, 0, 0], 1, 1),
+                   Player('Steve', -3, 234, [1, 0, 0], 1, 1),
+                   Player('Mr. Cho', -4, 54, [1, 0, 0], 1, 1),
+                   Player('XiaoCheng', -5, 5723, [1, 0, 0], 1, 1),
+                   Player('Alex', -6, 632, [1, 0, 0], 1, 1),
+                   Player('Matt', -7, 5723, [1, 0, 0], 1, 1),
+                   Player('Ed', -8, 5723, [1, 0, 0], 1, 1),
+                   Player('Josh', -9, 5723, [1, 0, 0], 1, 1),
+                   Player('Kevin', -10, 5723, [1, 0, 0], 1, 1),
+                   Player('Gus', -11, 5723, [1, 0, 0], 1, 1),
+                   Player('Pete', -12, 5723, [1, 0, 0], 1, 1),
+                   Player('Dan', -13, 5723, [1, 0, 0], 1, 1),
+                   Player('David', -14, 5723, [1, 0, 0], 1, 1),
+                   Player('Alex', -15, 5723, [1, 0, 0], 1, 1),
+                   Player('Eric', -16, 5723, [1, 0, 0], 1, 1),
+                   Player('Makio', -17, 5723, [1, 0, 0], 1, 1),
+                   Player('David', -18, 5723, [1, 0, 0], 1, 1),
+                   Player('Eric', -19, 5723, [1, 0, 0], 1, 1),
+                   Player('Howie', -20, 5723, [1, 0, 0], 1, 1),
                    ]
         self.tournament = HandiTournament.new_tournament(players)
         # 10000 was not enough?
@@ -448,7 +456,6 @@ class HandiTournamentTestCase(unittest.TestCase):
     def test_generate_pairing(self):
         # in first round, pairings are sorted and should be minimum pairing score
         self.assertEqual(self.tournament.pairing_score(self.pairing), 10)
-
 
     def test_new_round(self):
         self.tournament.start_new_round(self.pairing)
