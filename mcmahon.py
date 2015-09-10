@@ -365,8 +365,8 @@ class PlayerTestCase(unittest.TestCase):
         self.player_one = Player('Andrew', 10, 12345, [5,0,0], 5, 1)
 
     def test_repr(self):
-        self.assertEqual(repr(self.player_one), '<Player(name=Andrew, rank=10,'
-                                                ' aga_id=12345, mm_score=[5, 0, 0], mm_init=5, division=1)>')
+        self.assertEqual(repr(self.player_one), 'Player(name=Andrew, rank=10,'
+                                                ' aga_id=12345, mm_score=[5, 0, 0], mm_init=5, division=1)')
 
     def test_yaml(self):
         self.assertEqual(self.player_one, yaml.load(yaml.dump(self.player_one)))
