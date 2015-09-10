@@ -3,6 +3,7 @@
 
 import argparse
 import sys
+import os
 
 import yaml
 
@@ -130,6 +131,31 @@ class MMCli(object):
             h.close()
             print('Player {} successfully added'.format(player))
 
+    def newtournament(self):
+        parser = argparse.ArgumentParser(
+            description='Generate new round')
+        parser.add_argument('--handi', '-H',
+                            action="store_true",
+                            default=False,
+                            help="Make tournament handicapped")
+        parser.add_argument('--filename', '-f',
+                            action="store",
+                            default="tournament.yaml",
+                            help="Default is 'tournament.yaml'")
+        args = parser.parse_args(sys.argv[2:])
+
+        if os.path.isfile(args.filename):
+            raise RuntimeError('File {} already exists!'.format(args.filename))
+
+        if args.handi:
+            tournament = mcmahon.HandiTournament.new_tournament()
+        else:
+            tournament = mcmahon.Tournament.new_tournament()
+
+        h = open(args.filename, 'w')
+        h.write(yaml.dump(tournament))
+        h.close()
+        print('New tournament started and written to {}'.format(args.filename))
+
 if __name__ == '__main__':
     MMCli()
-
