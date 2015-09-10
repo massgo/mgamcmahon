@@ -150,20 +150,6 @@ class Tournament(object):
                          self.players[temp_list.pop()].mm_score[0])
         return score
 
-    def _generate_ideal_candidate_pairings(self, sample_size):
-        mm_scores = set()
-        for player in self.players:
-            mm_scores.add(player.mm_score)
-
-        while i < sample_size:
-            player_list = []
-            for mm_score in mm_scores:
-                player_sublist = [player_id for player_id, player in self.players.items()
-                                  if player.mm_score == mm_score]
-                random.shuffle(player_sublist)
-                player_list.extend(player_sublist)
-            yield player_list
-
     def generate_pairing(self, sample_size):
         # populate old pairs set, skip if first round
         if self.rounds:
