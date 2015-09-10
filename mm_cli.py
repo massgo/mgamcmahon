@@ -103,6 +103,33 @@ class MMCli(object):
             h.write(yaml.dump(tournament))
             h.close()
 
+    def addplayer(self):
+        parser = argparse.ArgumentParser(
+            description='Add a player. Name, rank, AGA ID, division')
+        parser.add_argument('--filename', '-f',
+                            action="store",
+                            default="tournament.yaml",
+                            help="Default is 'tournament.yaml'")
+        parser.add_argument('player', nargs='*')
+        #haven't figured out why nargs 3 or 5 doesn't work
+        args = parser.parse_args(sys.argv[2:])
+
+        h = open(args.filename, 'r')
+        tournament = yaml.load(h.read())
+        h.close()
+        tournament.calculate_mm_score()
+        if args.player:
+            name = args.player[0]
+            rank = int(args.player[1])
+            aga_id = int(args.player[2])
+            division = int(args.player[3])
+            player = mcmahon.Player(name, rank, aga_id, [0, 0, 0], 0, division)
+            tournament.add_player(player)
+            h = open(args.filename, 'w')
+            h.write(yaml.dump(tournament))
+            h.close()
+            print('Player {} successfully added'.format(player))
+
 if __name__ == '__main__':
     MMCli()
 
