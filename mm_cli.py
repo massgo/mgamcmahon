@@ -50,8 +50,6 @@ class MMCli(object):
 
         tournament.calculate_mm_score()
         tournament.start_new_round(tournament.generate_pairing(10000))
-        #print(tournament.rounds[-1])  # update with method for pairings
-        print(yaml.dump(tournament))
         h = open(args.filename, 'w')
         h.write(yaml.dump(tournament))
         h.close()
@@ -133,7 +131,7 @@ class MMCli(object):
 
     def newtournament(self):
         parser = argparse.ArgumentParser(
-            description='Generate new round')
+            description='Generate new tournament')
         parser.add_argument('--handi', '-H',
                             action="store_true",
                             default=False,
