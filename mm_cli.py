@@ -19,7 +19,7 @@ class MMCli(object):
 
             Command options:
 
-            new-round
+            newround
             show <[pairings], [standings]>
             add-result <round#, board#, winner#>''')
 
