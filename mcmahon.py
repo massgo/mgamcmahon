@@ -267,15 +267,17 @@ class Tournament(object):
                         wall_dict[match.black].append('{:>5}'.format(loser_str))
                     wall_dict[match.winner].append('{:>5}'.format(winner_str))
         res = []
-        res.append('{:5} {:20} |{:3} {:4} | {:15}'.format(' ', 'Player', ' S', ' SOS', 'Opponents'))
+        res.append('{:5} {:20} | {:4} |{:3} {:4} | {:15}'.format(' ', 'Player', 'Rank', ' S',
+                   ' SOS', 'Opponents'))
         res.append('-' * 78)
         for standing, player_id in enumerate(current_standings):
             player_obj = self.players[player_id]
             # format opponents string
             opponents = ' '.join(wall_dict[player_id])
             # full string for each player
-            res.append('{:4}. {:20} |{:3} {:4} |{:15}'.format((standing + 1), player_obj.name,
-                       player_obj.mm_score[0], player_obj.mm_score[1], opponents))
+            res.append('{:4}. {:20} | {:4} |{:3} {:4} |{:15}'.format((standing + 1),
+                       player_obj.name, player_obj.rank, player_obj.mm_score[0],
+                       player_obj.mm_score[1], opponents))
         return '\n'.join(res)
 
     def pairings_list(self):
