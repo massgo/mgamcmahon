@@ -127,8 +127,13 @@ class Tournament(object):
         return type(other) is not type(self) or self.__dict__ != other.__dict__
 
     def add_player(self, player):
-        self.players[self.id_ctr] = player
+        player_key = self.id_ctr
+        self.players[player_key] = player
+        self.current_players.add(player_key)
         self.id_ctr += 1
+
+    def drop_player(self, player_id):
+        self.current_players.remove(player_id)
 
     def _pairing_is_valid(self, player_list):
         valid = True
@@ -161,12 +166,13 @@ class Tournament(object):
         # Generate candidate pairings for one division
         pairings = []  # list initialized for all pairings in a round
         div_dict = {}  # dict for paritioning player_keys into divisions
-        # Create a dict of lists of divisions (list values are player_key)
-        for player_key, player in self.players.items():
+        # Create a dict of lists of divisions (list values are player_id)
+        for player_id in self.current_players:
+            player = self.players[player_id]
             if player.division in div_dict.keys():
-                div_dict[player.division].append(player_key)
+                div_dict[player.division].append(player_id)
             else:
-                div_dict[player.division] = [player_key]
+                div_dict[player.division] = [player_id]
 
         # for each division, generate pairings and optimize.
         for div in div_dict.values():
@@ -266,6 +272,10 @@ class Tournament(object):
                         loser_str += 'B' + str(id_to_wall[match.white] + 1)
                         wall_dict[match.black].append('{:>5}'.format(loser_str))
                     wall_dict[match.winner].append('{:>5}'.format(winner_str))
+            for player, results in wall_dict.items():
+                if len(results) <= idx:
+                    results.extend(' ' * 6)
+
         res = []
         res.append('{:5} {:20} | {:4} |{:3} {:4} | {:15}'.format(' ', 'Player', 'Rank', ' S',
                    ' SOS', 'Opponents'))

@@ -129,6 +129,29 @@ class MMCli(object):
             h.close()
             print('Player {} successfully added'.format(player))
 
+    def drop_player(self):
+        parser = argparse.ArgumentParser(
+            description='Drop a player by player ID')
+        parser.add_argument('--filename', '-f',
+                            action="store",
+                            default="tournament.yaml",
+                            help="Default is 'tournament.yaml'")
+        parser.add_argument('player_id', nargs='*')
+        args = parser.parse_args(sys.argv[2:])
+
+        h = open(args.filename, 'r')
+        tournament = yaml.load(h.read())
+        h.close()
+        tournament.calculate_mm_score()
+        if args.player_id:
+            player_id = int(args.player_id[0])
+            tournament.drop_player(player_id)
+            player = tournament.players[player_id]
+            h = open(args.filename, 'w')
+            h.write(yaml.dump(tournament))
+            h.close()
+            print('Player {}: {} successfully dropped'.format(player_id, player))
+
     def newtournament(self):
         parser = argparse.ArgumentParser(
             description='Generate new tournament')
