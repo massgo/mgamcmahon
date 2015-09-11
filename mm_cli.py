@@ -3,6 +3,7 @@
 
 import argparse
 import sys
+import os
 
 import yaml
 
@@ -19,7 +20,7 @@ class MMCli(object):
 
             Command options:
 
-            new-round
+            newround
             show <[pairings], [standings]>
             add-result <round#, board#, winner#>''')
 
@@ -49,8 +50,6 @@ class MMCli(object):
 
         tournament.calculate_mm_score()
         tournament.start_new_round(tournament.generate_pairing(10000))
-        #print(tournament.rounds[-1])  # update with method for pairings
-        print(yaml.dump(tournament))
         h = open(args.filename, 'w')
         h.write(yaml.dump(tournament))
         h.close()
@@ -103,6 +102,58 @@ class MMCli(object):
             h.write(yaml.dump(tournament))
             h.close()
 
+    def addplayer(self):
+        parser = argparse.ArgumentParser(
+            description='Add a player. Name, rank, AGA ID, division')
+        parser.add_argument('--filename', '-f',
+                            action="store",
+                            default="tournament.yaml",
+                            help="Default is 'tournament.yaml'")
+        parser.add_argument('player', nargs='*')
+        #haven't figured out why nargs 3 or 5 doesn't work
+        args = parser.parse_args(sys.argv[2:])
+
+        h = open(args.filename, 'r')
+        tournament = yaml.load(h.read())
+        h.close()
+        tournament.calculate_mm_score()
+        if args.player:
+            name = args.player[0]
+            rank = int(args.player[1])
+            aga_id = int(args.player[2])
+            division = int(args.player[3])
+            player = mcmahon.Player(name, rank, aga_id, [0, 0, 0], 0, division)
+            tournament.add_player(player)
+            h = open(args.filename, 'w')
+            h.write(yaml.dump(tournament))
+            h.close()
+            print('Player {} successfully added'.format(player))
+
+    def newtournament(self):
+        parser = argparse.ArgumentParser(
+            description='Generate new tournament')
+        parser.add_argument('--handi', '-H',
+                            action="store_true",
+                            default=False,
+                            help="Make tournament handicapped")
+        parser.add_argument('--filename', '-f',
+                            action="store",
+                            default="tournament.yaml",
+                            help="Default is 'tournament.yaml'")
+        args = parser.parse_args(sys.argv[2:])
+
+        if os.path.isfile(args.filename):
+            raise RuntimeError('File {} already exists!'.format(args.filename))
+
+        if args.handi:
+            tournament = mcmahon.HandiTournament.new_tournament()
+        else:
+            tournament = mcmahon.Tournament.new_tournament()
+
+        h = open(args.filename, 'w')
+        h.write(yaml.dump(tournament))
+        h.close()
+        print('New tournament started and written to {}'.format(args.filename))
+
 if __name__ == '__main__':
     MMCli()
-

@@ -267,15 +267,17 @@ class Tournament(object):
                         wall_dict[match.black].append('{:>5}'.format(loser_str))
                     wall_dict[match.winner].append('{:>5}'.format(winner_str))
         res = []
-        res.append('{:5} {:20} |{:3} {:4} | {:15}'.format(' ', 'Player', ' S', ' SOS', 'Opponents'))
+        res.append('{:5} {:20} | {:4} |{:3} {:4} | {:15}'.format(' ', 'Player', 'Rank', ' S',
+                   ' SOS', 'Opponents'))
         res.append('-' * 78)
         for standing, player_id in enumerate(current_standings):
             player_obj = self.players[player_id]
             # format opponents string
             opponents = ' '.join(wall_dict[player_id])
             # full string for each player
-            res.append('{:4}. {:20} |{:3} {:4} |{:15}'.format((standing + 1), player_obj.name,
-                       player_obj.mm_score[0], player_obj.mm_score[1], opponents))
+            res.append('{:4}. {:20} | {:4} |{:3} {:4} |{:15}'.format((standing + 1),
+                       player_obj.name, player_obj.rank, player_obj.mm_score[0],
+                       player_obj.mm_score[1], opponents))
         return '\n'.join(res)
 
     def pairings_list(self):
@@ -292,7 +294,6 @@ class Tournament(object):
         for board_key, board in current_round.items():
             res.append('{:7} | {:22} | {:22}'.format(board_key, self.players[board.white].name,
                                                      self.players[board.black].name))
-        res.append('\n' * 50)
         return '\n'.join(res)
 
 
@@ -326,7 +327,25 @@ class HandiTournament(Tournament):
                             - self.players[player2].mm_score[0])
             score_handi += abs(self.players[player1].rank
                                - self.players[player2].rank)
-        return 2 * score_mm + score_handi
+        return 3 * score_mm + score_handi
+
+    def pairings_list(self):
+        # pretty printing pairings list with board#, names.
+        res = []
+        res.append('')
+        res.append(' ' * 29 + '*' * 20)
+        res.append(' ' * 29 + '* Round {} Pairings *'.format(len(self.rounds)))
+        res.append(' ' * 29 + '*' * 20)
+        res.append('')
+        res.append('{:^7} | {:^22} | {:^22} | {:^5}'.format('Board', 'White', 'Black', 'Handi'))
+        res.append('-' * 78)
+        current_round = self.rounds[-1]
+        for board_key, board in current_round.items():
+            white = self.players[board.white]
+            black = self.players[board.black]
+            res.append('{:^7} | {:22} | {:22} | {:^5}'.format(board_key, white.name, black.name,
+                       abs(white.rank - black.rank)))
+        return '\n'.join(res)
 
 
 def handi_tournament_representer(dumper, data):
